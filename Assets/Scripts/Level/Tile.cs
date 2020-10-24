@@ -15,4 +15,8 @@ public class Tile : MonoBehaviour
     {
         
     }
+
+    public void Combine(Tile newTile)
+    {
+    }
 }
