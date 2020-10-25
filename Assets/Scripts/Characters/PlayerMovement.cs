@@ -11,8 +11,10 @@ public class PlayerMovement : MonoBehaviour
     private float tileWidth = 4.5f;
     private float rotationRadius = 1f;
     private float rotationDirection = 0;
+    private float holdTimer = 0;
+    private const float thrustTime = .1f, decayTime = .5f;
 
-    private Tile lastTile;
+    private Tile currentTile,previousTile;
 
     private int tileX, tileZ;
 
@@ -26,6 +28,12 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        ThrustCheck();
+        BounceCheck();
+    }
+
+    private void ThrustCheck()
+    {
         if (Input.anyKey)
         {
             if (!pressed)
@@ -38,19 +46,34 @@ public class PlayerMovement : MonoBehaviour
             }
             Vector3 dir = GetHeading(pillar);
 
-            rb.AddForce(dir.normalized * Acceleration, ForceMode.Acceleration);
+            holdTimer += Time.deltaTime;
+            if (holdTimer >= thrustTime)
+                rb.AddForce(dir.normalized * Acceleration, ForceMode.Acceleration);
         }
         else
+        {
+            holdTimer = 0;
             pressed = false;
+        }
+    }
 
-        BounceCheck();
+    private void ActionCheck()
+    {
+        if (holdTimer >= decayTime)
+        {
+            if(rb.velocity.magnitude < .01f)
+            {
+                rb.velocity = Vector3.zero;
+            }
+            rb.velocity = rb.velocity.normalized * .5f;
+        }
     }
 
     private void BounceCheck()
     {
         Tile t = LevelController.MapTile(gameObject);
 
-        if (t != lastTile)
+        if (t != currentTile)
         {
             //LevelController.MapLocation(gameObject, out x1, out z1);
             //print(" moved to Tile " + x1 + " " + y1+" s:"+t.StackSize);
@@ -60,7 +83,7 @@ public class PlayerMovement : MonoBehaviour
                 print("course correction");
 
                 int x=1, z=1;
-                Vector3 dis = transform.position - lastTile.transform.position;
+                Vector3 dis = transform.position - currentTile.transform.position;
                 if (dis.x > tileWidth)
                 {
                     if (!Safe(LevelController.MapTile(tileX + 1, tileZ)))
@@ -69,7 +92,7 @@ public class PlayerMovement : MonoBehaviour
                             x = -1;
                     }
                 }
-                else if (dis.x < tileWidth)
+                else if (dis.x < -tileWidth)
                 {
                     if (!Safe(LevelController.MapTile(tileX - 1, tileZ)))
                     {
@@ -86,7 +109,7 @@ public class PlayerMovement : MonoBehaviour
                             z = -1;
                     }
                 }
-                else if (dis.z < tileWidth)
+                else if (dis.z < -tileWidth)
                 {
                     if (!Safe(LevelController.MapTile(tileX, tileZ - 1)))
                     {
@@ -108,7 +131,8 @@ public class PlayerMovement : MonoBehaviour
             else
             {
                 wasSafe = true;
-                lastTile = t;
+                previousTile = currentTile;
+                currentTile = t;
                 LevelController.MapLocation(gameObject, out this.tileX, out tileZ);
             }
         }
