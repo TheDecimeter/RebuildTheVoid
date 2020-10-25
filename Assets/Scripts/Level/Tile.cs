@@ -8,17 +8,22 @@ public class Tile : MonoBehaviour
     public GameObject pillar;
     public bool addon = false;
 
-    public int StackSize { get; protected set; }
+    private int _s = 0;
+    public int StackSize { get
+        {
+            return _s;
+        }
+        protected set
+        {
+            //print("set stack at " + x + " " + y + value);
+            _s = value;
+
+        }
+    }
 
     private int tileHeight = 1, x, y;
 
     private List<Tile> additions = new List<Tile>();
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        StackSize = 0;
-    }
 
     public void SetPos(int x, int y)
     {
@@ -51,17 +56,12 @@ public class Tile : MonoBehaviour
                 pillar.gameObject.SetActive(true);
             }
             StackSize++;
-            
+            //print("adding stack size for " + x + " " + y+ "  stack size ="+StackSize);
         }
         GameObject g = Instantiate(tile.gameObject);
         g.transform.position = LevelController.PhysicalLocation(x, y);
         additions.Add(g.GetComponent<Tile>());
 
-        updateHeight();
-    }
-
-    private void updateHeight()
-    {
-        
+        UpdateHeight();
     }
 }
