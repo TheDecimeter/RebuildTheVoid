@@ -306,7 +306,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc252e76a12d3c44ea4fe23c4fb75d53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileTemplate: {fileID: 4117277779626024780, guid: 895801b132edd8747937283950534a70,
+  TileTemplate: {fileID: 4117277779626024780, guid: 895801b132edd8747937283950534a70,
+    type: 3}
+  Embankment: {fileID: 4117277779626024780, guid: 6a28106950f56d24590cb330215bf256,
     type: 3}
   tileSize: 10
 --- !u!1001 &586867613899909521
