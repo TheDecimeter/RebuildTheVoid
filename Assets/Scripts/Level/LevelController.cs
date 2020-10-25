@@ -91,4 +91,11 @@ public class LevelController : MonoBehaviour
         //print("providing pillar " + x + " " + y);
         return map[x][y];
     }
+    public static Tile MapTile(int x, int y)
+    {
+        if (!(x >= 1 && x <= length && y >= 1 && y <= width))
+            return nullTile;
+        //print("providing pillar " + x + " " + y);
+        return map[x][y];
+    }
 }

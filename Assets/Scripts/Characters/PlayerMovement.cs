@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float Acceleration;
-    private bool pressed = false;
+    private bool pressed = false, wasSafe=true;
     private Vector3 pillar;
 
     private float tileWidth = 4.5f;
@@ -13,6 +13,8 @@ public class PlayerMovement : MonoBehaviour
     private float rotationDirection = 0;
 
     private Tile lastTile;
+
+    private int tileX, tileZ;
 
     Rigidbody rb;
     // Start is called before the first frame update
@@ -50,28 +52,65 @@ public class PlayerMovement : MonoBehaviour
 
         if (t != lastTile)
         {
-            int x1, y1;
-            LevelController.MapLocation(gameObject, out x1, out y1);
-            print(" moved to Tile " + x1 + " " + y1+" s:"+t.StackSize);
+            //LevelController.MapLocation(gameObject, out x1, out z1);
+            //print(" moved to Tile " + x1 + " " + y1+" s:"+t.StackSize);
 
             if (!Safe(t))
             {
-                print("not safe");
+                print("course correction");
 
-                int x, z;
-                Vector3 dis = this.transform.position - lastTile.transform.position;
-                if (Mathf.Abs(dis.x) >= tileWidth)
-                    x = -1;
-                else
-                    x = 1;
-                if (Mathf.Abs(dis.z) >= tileWidth)
-                    z = -1;
-                else
-                    z = 1;
+                int x=1, z=1;
+                Vector3 dis = transform.position - lastTile.transform.position;
+                if (dis.x > tileWidth)
+                {
+                    if (!Safe(LevelController.MapTile(tileX + 1, tileZ)))
+                    {
+                        if (rb.velocity.x > 0)
+                            x = -1;
+                    }
+                }
+                else if (dis.x < tileWidth)
+                {
+                    if (!Safe(LevelController.MapTile(tileX - 1, tileZ)))
+                    {
+                        if (rb.velocity.x < 0)
+                            x = -1;
+                    }
+                }
+
+                if (dis.z > tileWidth)
+                {
+                    if (!Safe(LevelController.MapTile(tileX, tileZ + 1)))
+                    {
+                        if (rb.velocity.z > 0)
+                            z = -1;
+                    }
+                }
+                else if (dis.z < tileWidth)
+                {
+                    if (!Safe(LevelController.MapTile(tileX, tileZ - 1)))
+                    {
+                        if (rb.velocity.z < 0)
+                            z = -1;
+                    }
+                }
+
                 rb.velocity = new Vector3(rb.velocity.x * x, 0, rb.velocity.z * z);
+
+
+                    //dis = dis.normalized * tileWidth;
+                    //Vector3 inBoundsX = Vector3.Project(dis, Vector3.right);
+                    //Vector3 inBoundsZ = Vector3.Project(dis, Vector3.forward);
+                    //Vector3 inBoundsPlaneCoord = lastTile.transform.position + inBoundsX + inBoundsZ;
+                    //transform.position = new Vector3(inBoundsPlaneCoord.x,transform.position.y,inBoundsPlaneCoord.z);
+                
             }
             else
+            {
+                wasSafe = true;
                 lastTile = t;
+                LevelController.MapLocation(gameObject, out this.tileX, out tileZ);
+            }
         }
 
         return;
