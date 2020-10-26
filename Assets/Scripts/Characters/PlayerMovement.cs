@@ -11,8 +11,10 @@ public class PlayerMovement : MonoBehaviour
     private float tileWidth = 4.5f;
     private float rotationRadius = 1f;
     private float rotationDirection = 0;
-    private float holdTimer = 0;
+    private float holdTimer = 0, lastAngle=0, deltaAngle;
     private const float thrustTime = .1f, decayTime = .5f;
+
+    private Vector3 lastDirToPillar;
 
     private Tile currentTile,previousTile;
 
@@ -29,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         ThrustCheck();
+        ActionCheck();
         BounceCheck();
     }
 
@@ -41,7 +44,11 @@ public class PlayerMovement : MonoBehaviour
                 pressed = true;
                 Tile t = LevelController.MapTile(gameObject);
                 if (Safe(t))
+                {
                     pillar = t.pillar.transform.position;
+                    deltaAngle = 0;
+                    lastDirToPillar = pillar - transform.position;
+                }
 
             }
             Vector3 dir = GetHeading(pillar);
@@ -52,7 +59,13 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            holdTimer = 0;
+            if (pressed)
+            {
+                if (holdTimer < thrustTime)
+                    print("press");
+                holdTimer = 0;
+                deltaAngle = 0;
+            }
             pressed = false;
         }
     }
@@ -61,11 +74,39 @@ public class PlayerMovement : MonoBehaviour
     {
         if (holdTimer >= decayTime)
         {
-            if(rb.velocity.magnitude < .01f)
+            //keep track of angle traveled around pillar
+            //float newAng = angleToPillar();
+            //deltaAngle += lastAngle - newAng;
+
+            //print("newAng " + newAng + "   delta " + deltaAngle);
+            //lastAngle = newAng;
+
+            Vector3 toPillar= pillar - transform.position;
+            deltaAngle += Vector3.Angle(lastDirToPillar, toPillar);
+            lastDirToPillar = toPillar;
+            //print("newAng " + toPillar + "   delta " + deltaAngle);
+
+            if (deltaAngle > 512)
             {
-                rb.velocity = Vector3.zero;
+                print("decay");
+                // if pretty much stopped, stop and trigger action
+                if (rb.velocity.magnitude < .01f)
+                {
+                    rb.velocity = Vector3.zero;
+                }
+                //otherwise, decay orbit
+                else
+                {
+                    rb.AddForce(rb.velocity * -.1f, ForceMode.VelocityChange);
+                    if (toPillar.magnitude <= 1)
+                        rb.AddForce(toPillar * Acceleration, ForceMode.Acceleration);
+                    else
+                        rb.AddForce(toPillar.normalized * Acceleration / 2, ForceMode.Acceleration);
+                }
             }
-            rb.velocity = rb.velocity.normalized * .5f;
+
+
+            
         }
     }
 
@@ -119,14 +160,6 @@ public class PlayerMovement : MonoBehaviour
                 }
 
                 rb.velocity = new Vector3(rb.velocity.x * x, 0, rb.velocity.z * z);
-
-
-                    //dis = dis.normalized * tileWidth;
-                    //Vector3 inBoundsX = Vector3.Project(dis, Vector3.right);
-                    //Vector3 inBoundsZ = Vector3.Project(dis, Vector3.forward);
-                    //Vector3 inBoundsPlaneCoord = lastTile.transform.position + inBoundsX + inBoundsZ;
-                    //transform.position = new Vector3(inBoundsPlaneCoord.x,transform.position.y,inBoundsPlaneCoord.z);
-                
             }
             else
             {
