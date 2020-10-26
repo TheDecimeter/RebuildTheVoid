@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     private float tileWidth = 4.5f;
     private float rotationRadius = 1f;
     private float rotationDirection = 0;
-    private float holdTimer = 0, lastAngle=0, deltaAngle;
+    private float holdTimer = 0, lastAngle=0, deltaAngle, deltaAngleAction;
     private const float thrustTime = .1f, decayTime = .5f;
 
     private Vector3 lastDirToPillar;
@@ -47,6 +47,7 @@ public class PlayerMovement : MonoBehaviour
                 {
                     pillar = t.pillar.transform.position;
                     deltaAngle = 0;
+                    deltaAngleAction = 0;
                     lastDirToPillar = pillar - transform.position;
                 }
 
@@ -65,6 +66,7 @@ public class PlayerMovement : MonoBehaviour
                     print("press");
                 holdTimer = 0;
                 deltaAngle = 0;
+                deltaAngleAction = 0;
             }
             pressed = false;
         }
@@ -82,27 +84,29 @@ public class PlayerMovement : MonoBehaviour
             //lastAngle = newAng;
 
             Vector3 toPillar= pillar - transform.position;
-            deltaAngle += Vector3.Angle(lastDirToPillar, toPillar);
+            float angle= Vector3.Angle(lastDirToPillar, toPillar);
+            deltaAngle += angle;
             lastDirToPillar = toPillar;
             //print("newAng " + toPillar + "   delta " + deltaAngle);
 
-            if (deltaAngle > 512)
+            if (deltaAngle > 480)
             {
-                print("decay");
-                // if pretty much stopped, stop and trigger action
-                if (rb.velocity.magnitude < .01f)
+                //print("decay");
+                
+                rb.AddForce(rb.velocity * -Acceleration/4, ForceMode.Acceleration);
+                if (toPillar.magnitude <= 1)
                 {
-                    rb.velocity = Vector3.zero;
+                    //print("delta, close");
+                    rb.AddForce(toPillar * Acceleration, ForceMode.Acceleration);
+                    deltaAngleAction += angle;
+                    if (deltaAngleAction > 360)
+                    {
+                        print("action");
+                    }
                 }
-                //otherwise, decay orbit
                 else
-                {
-                    rb.AddForce(rb.velocity * -.1f, ForceMode.VelocityChange);
-                    if (toPillar.magnitude <= 1)
-                        rb.AddForce(toPillar * Acceleration, ForceMode.Acceleration);
-                    else
-                        rb.AddForce(toPillar.normalized * Acceleration / 2, ForceMode.Acceleration);
-                }
+                    rb.AddForce(toPillar.normalized * Acceleration / 2, ForceMode.Acceleration);
+                
             }
 
 
