@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Pillar
+  m_Name: Embankment
   m_Shader: {fileID: 211, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords: _ALPHAPREMULTIPLY_ON _EMISSION
   m_LightmapFlags: 0
@@ -92,7 +92,7 @@ Material:
     - _ZWrite: 0
     m_Colors:
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
-    - _Color: {r: 0.21359916, g: 0.53813636, b: 0.6037736, a: 0.67058825}
+    - _Color: {r: 0.6039216, g: 0.21577086, b: 0.21176468, a: 0.14117648}
     - _ColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0.05339979, g: 0.13285044, b: 0.1509434, a: 1}
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
