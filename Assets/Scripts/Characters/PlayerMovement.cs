@@ -5,8 +5,9 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float Acceleration;
+    public Grapple GrappleObject;
     private bool pressed = false, wasSafe=true;
-    private Vector3 pillar;
+    private Vector3 pillar, pullPoint;
 
     private float tileWidth = 4.5f;
     private float rotationRadius = 1f;
@@ -46,17 +47,21 @@ public class PlayerMovement : MonoBehaviour
                 if (Safe(t))
                 {
                     pillar = t.pillar.transform.position;
+                    pullPoint = t.pullPoint.transform.position;
                     deltaAngle = 0;
                     deltaAngleAction = 0;
                     lastDirToPillar = pillar - transform.position;
                 }
 
             }
-            Vector3 dir = GetHeading(pillar);
+            Vector3 dir = GetHeading(pullPoint);
 
             holdTimer += Time.deltaTime;
             if (holdTimer >= thrustTime)
+            {
                 rb.AddForce(dir.normalized * Acceleration, ForceMode.Acceleration);
+                GrappleObject.PointAt(pullPoint);
+            }
         }
         else
         {
@@ -67,8 +72,9 @@ public class PlayerMovement : MonoBehaviour
                 holdTimer = 0;
                 deltaAngle = 0;
                 deltaAngleAction = 0;
+                pressed = false;
+                GrappleObject.Retract();
             }
-            pressed = false;
         }
     }
 
@@ -76,27 +82,18 @@ public class PlayerMovement : MonoBehaviour
     {
         if (holdTimer >= decayTime)
         {
-            //keep track of angle traveled around pillar
-            //float newAng = angleToPillar();
-            //deltaAngle += lastAngle - newAng;
 
-            //print("newAng " + newAng + "   delta " + deltaAngle);
-            //lastAngle = newAng;
-
-            Vector3 toPillar= pillar - transform.position;
+            Vector3 toPillar= pullPoint - transform.position;
             float angle= Vector3.Angle(lastDirToPillar, toPillar);
             deltaAngle += angle;
             lastDirToPillar = toPillar;
-            //print("newAng " + toPillar + "   delta " + deltaAngle);
 
             if (deltaAngle > 480)
             {
-                //print("decay");
                 
                 rb.AddForce(rb.velocity * -Acceleration/4, ForceMode.Acceleration);
                 if (toPillar.magnitude <= 1)
                 {
-                    //print("delta, close");
                     rb.AddForce(toPillar * Acceleration, ForceMode.Acceleration);
                     deltaAngleAction += angle;
                     if (deltaAngleAction > 360)

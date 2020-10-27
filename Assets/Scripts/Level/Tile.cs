@@ -6,6 +6,7 @@ public class Tile : MonoBehaviour
 {
     public GameObject floor;
     public GameObject pillar;
+    public GameObject pullPoint;
     public bool addon = false;
 
     private int _s = 0;
