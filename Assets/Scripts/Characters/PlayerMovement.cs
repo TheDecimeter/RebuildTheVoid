@@ -4,9 +4,14 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public LevelController Level;
     public float Acceleration;
     public Grapple GrappleObject;
-    private bool pressed = false, wasSafe=true;
+    public Inventory Inventory;
+    public Camera Camera;
+
+
+    private bool pressed = false, actionPerformed = false, wasSafe=true;
     private Vector3 pillar, pullPoint;
 
     private float tileWidth = 4.5f;
@@ -31,9 +36,11 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Tile t = Level.MapTile(gameObject);
+        t.OnTouchUpdate(this);
         ThrustCheck();
-        ActionCheck();
-        BounceCheck();
+        ActionCheck(t);
+        BounceCheck(t);
     }
 
     private void ThrustCheck()
@@ -43,11 +50,11 @@ public class PlayerMovement : MonoBehaviour
             if (!pressed)
             {
                 pressed = true;
-                Tile t = LevelController.MapTile(gameObject);
+                Tile t = Level.MapTile(gameObject);
                 if (Safe(t))
                 {
-                    pillar = t.pillar.transform.position;
-                    pullPoint = t.pullPoint.transform.position;
+                    pillar = t.Pillar.transform.position;
+                    pullPoint = t.PullPoint.transform.position;
                     deltaAngle = 0;
                     deltaAngleAction = 0;
                     lastDirToPillar = pillar - transform.position;
@@ -57,7 +64,7 @@ public class PlayerMovement : MonoBehaviour
             Vector3 dir = GetHeading(pullPoint);
 
             holdTimer += Time.deltaTime;
-            if (holdTimer >= thrustTime)
+            if (holdTimer >= thrustTime && !actionPerformed)
             {
                 rb.AddForce(dir.normalized * Acceleration, ForceMode.Acceleration);
                 GrappleObject.PointAt(pullPoint);
@@ -73,14 +80,15 @@ public class PlayerMovement : MonoBehaviour
                 deltaAngle = 0;
                 deltaAngleAction = 0;
                 pressed = false;
+                actionPerformed = false;
                 GrappleObject.Retract();
             }
         }
     }
 
-    private void ActionCheck()
+    private void ActionCheck(Tile t)
     {
-        if (holdTimer >= decayTime)
+        if (!actionPerformed && holdTimer >= decayTime)
         {
 
             Vector3 toPillar= pullPoint - transform.position;
@@ -98,7 +106,9 @@ public class PlayerMovement : MonoBehaviour
                     deltaAngleAction += angle;
                     if (deltaAngleAction > 360)
                     {
-                        print("action");
+                        print("player performed action");
+                        actionPerformed = true;
+                        t.Action(this);
                     }
                 }
                 else
@@ -111,10 +121,9 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void BounceCheck()
+    private void BounceCheck(Tile t)
     {
-        Tile t = LevelController.MapTile(gameObject);
-
+        
         if (t != currentTile)
         {
             //LevelController.MapLocation(gameObject, out x1, out z1);
@@ -122,13 +131,12 @@ public class PlayerMovement : MonoBehaviour
 
             if (!Safe(t))
             {
-                print("course correction");
 
                 int x=1, z=1;
                 Vector3 dis = transform.position - currentTile.transform.position;
                 if (dis.x > tileWidth)
                 {
-                    if (!Safe(LevelController.MapTile(tileX + 1, tileZ)))
+                    if (!Safe(Level.MapTile(tileX + 1, tileZ)))
                     {
                         if (rb.velocity.x > 0)
                             x = -1;
@@ -136,7 +144,7 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else if (dis.x < -tileWidth)
                 {
-                    if (!Safe(LevelController.MapTile(tileX - 1, tileZ)))
+                    if (!Safe(Level.MapTile(tileX - 1, tileZ)))
                     {
                         if (rb.velocity.x < 0)
                             x = -1;
@@ -145,7 +153,7 @@ public class PlayerMovement : MonoBehaviour
 
                 if (dis.z > tileWidth)
                 {
-                    if (!Safe(LevelController.MapTile(tileX, tileZ + 1)))
+                    if (!Safe(Level.MapTile(tileX, tileZ + 1)))
                     {
                         if (rb.velocity.z > 0)
                             z = -1;
@@ -153,7 +161,7 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else if (dis.z < -tileWidth)
                 {
-                    if (!Safe(LevelController.MapTile(tileX, tileZ - 1)))
+                    if (!Safe(Level.MapTile(tileX, tileZ - 1)))
                     {
                         if (rb.velocity.z < 0)
                             z = -1;
@@ -165,6 +173,9 @@ public class PlayerMovement : MonoBehaviour
             else
             {
                 wasSafe = true;
+                if(currentTile!=null)
+                    currentTile.OnTouchLeft(this);
+                t.OnTouchBegin(this);
                 previousTile = currentTile;
                 currentTile = t;
                 LevelController.MapLocation(gameObject, out this.tileX, out tileZ);

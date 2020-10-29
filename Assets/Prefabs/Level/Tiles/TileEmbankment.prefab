@@ -248,9 +248,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b3f2963c52c1b349a4c545877bd8671, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floor: {fileID: 0}
-  pillar: {fileID: 0}
-  addon: 0
+  Name: 
+  Cost: 0
+  Floor: {fileID: 0}
+  Pillar: {fileID: 0}
+  PullPoint: {fileID: 0}
+  Text: {fileID: 0}
+  Addon: 0
+  Static: 1
 --- !u!1 &5736966429929995657
 GameObject:
   m_ObjectHideFlags: 0

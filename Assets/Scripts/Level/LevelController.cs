@@ -8,19 +8,25 @@ public class LevelController : MonoBehaviour
     public Tile Embankment;
     public Tile Wall;
 
+    public LevelConfig CurrentLevel;
+
     public float tileSize = 10;
     private static float tileSizeStat;
     private static Tile nullTile;
     private static int length, width;
 
-    private static Tile[][] map;
+    private Tile[][] map;
 
     // Start is called before the first frame update
     void Start()
     {
         tileSizeStat = tileSize;
-        GenerateLevel(7, 5);
-        AddEmbankement();
+        //GenerateLevel(7, 5);
+        //AddEmbankement();
+
+        GenerateLevel(CurrentLevel.Length, CurrentLevel.Width);
+        AddStartTiles(CurrentLevel.Tiles);
+        
 
         nullTile = Instantiate(TileTemplate);
         nullTile.name = "nullTile";
@@ -48,6 +54,15 @@ public class LevelController : MonoBehaviour
             }
         LevelController.length = length;
         LevelController.width = width;
+    }
+
+    private void AddStartTiles(LevelConfig.TileConfig [] tiles)
+    {
+        foreach (LevelConfig.TileConfig tile in tiles)
+        {
+            map[tile.x][tile.y].Add(tile.TileTemplate);
+            map[tile.x][tile.y].AddAction(tile.Action);
+        }
     }
 
     private void AddEmbankement()
@@ -82,7 +97,7 @@ public class LevelController : MonoBehaviour
         y = (int)((pos.z) / tileSizeStat);
     }
 
-    public static Tile MapTile(GameObject g)
+    public Tile MapTile(GameObject g)
     {
         int x, y;
         MapLocation(g, out x, out y);
@@ -91,7 +106,7 @@ public class LevelController : MonoBehaviour
         //print("providing pillar " + x + " " + y);
         return map[x][y];
     }
-    public static Tile MapTile(int x, int y)
+    public Tile MapTile(int x, int y)
     {
         if (!(x >= 1 && x <= length && y >= 1 && y <= width))
             return nullTile;

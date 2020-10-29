@@ -12,14 +12,12 @@ public class CameraFollow : MonoBehaviour
     public float OffAngle;
     public float followSpeed;
 
-    private Vector3 lastTargetLocation = Vector3.zero;
-
     private void Start()
     {
-        lastTargetLocation = Target.position - Camera.transform.position;
+        Follow();
+        Point();
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
         Follow();
@@ -47,14 +45,12 @@ public class CameraFollow : MonoBehaviour
 
     private void Point()
     {
-        //Camera.LookAt(Target);
         Vector3 toTarget = Target.position - Camera.transform.position;
         float offAngle = Mathf.Abs(Vector3.Angle(toTarget, Camera.transform.forward));
         if (offAngle > OffAngle)
         {
             Calculator.LookAt(Target);
             Camera.rotation = Quaternion.Slerp(Camera.rotation, Calculator.rotation, Time.fixedDeltaTime*followSpeed*(offAngle-OffAngle));
-            //lastTargetLocation = toTarget;
         }
         else
         {
