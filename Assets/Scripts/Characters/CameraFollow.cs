@@ -9,11 +9,24 @@ public class CameraFollow : MonoBehaviour
     public Transform Calculator;
     public float MaxFollowDistance;
     public float MinFollowDistance;
+    public float OffAngle;
+    public float followSpeed;
+
+    private Vector3 lastTargetLocation = Vector3.zero;
+
+    private void Start()
+    {
+        lastTargetLocation = Target.position - Camera.transform.position;
+    }
 
     // Update is called once per frame
     void Update()
     {
         Follow();
+    }
+
+    private void FixedUpdate()
+    {
         Point();
     }
 
@@ -35,7 +48,18 @@ public class CameraFollow : MonoBehaviour
     private void Point()
     {
         //Camera.LookAt(Target);
-        Calculator.LookAt(Target);
-        Camera.rotation = Quaternion.Slerp(Camera.rotation, Calculator.rotation, 0.9f);
+        Vector3 toTarget = Target.position - Camera.transform.position;
+        float offAngle = Mathf.Abs(Vector3.Angle(toTarget, Camera.transform.forward));
+        if (offAngle > OffAngle)
+        {
+            Calculator.LookAt(Target);
+            Camera.rotation = Quaternion.Slerp(Camera.rotation, Calculator.rotation, Time.fixedDeltaTime*followSpeed*(offAngle-OffAngle));
+            //lastTargetLocation = toTarget;
+        }
+        else
+        {
+            Calculator.LookAt(Target);
+            Camera.rotation = Quaternion.Slerp(Camera.rotation, Calculator.rotation, Time.fixedDeltaTime);
+        }
     }
 }

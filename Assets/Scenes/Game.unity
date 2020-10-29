@@ -213,8 +213,10 @@ MonoBehaviour:
   Target: {fileID: 1733869052}
   Camera: {fileID: 534669905}
   Calculator: {fileID: 1967455303}
-  MaxFollowDistance: 10
-  MinFollowDistance: 5
+  MaxFollowDistance: 12
+  MinFollowDistance: 9
+  OffAngle: 10
+  followSpeed: 0.4
 --- !u!4 &242335456
 Transform:
   m_ObjectHideFlags: 0
