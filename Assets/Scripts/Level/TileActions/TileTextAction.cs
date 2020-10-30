@@ -24,17 +24,6 @@ public class TileTextAction : TileAction
         tile.Text.Show(ActionMessage,ShowFor);
     }
 
-    public override void Copy(TileAction original)
-    {
-        if(original is TileTextAction)
-        {
-            TileTextAction o = (TileTextAction)original;
-            this.StartMessage = o.StartMessage;
-            this.ActionMessage = o.ActionMessage;
-            this.ShowFor = o.ShowFor;
-        }
-    }
-
     public override void OnTouchBegin(PlayerMovement player)
     {
     }

@@ -60,20 +60,31 @@ public class LevelController : MonoBehaviour
     {
         foreach (LevelConfig.TileConfig tile in tiles)
         {
-            map[tile.x][tile.y].Add(tile.TileTemplate);
+            map[tile.x][tile.y].Add(Inventory.CloneTile(tile.TileTemplate));
             map[tile.x][tile.y].AddAction(tile.Action);
         }
+    }
+
+    public bool LegalSpot(Tile t)
+    {
+        int x, y;
+        MapLocation(t.gameObject, out x, out y);
+        if (x == 0 || x == length + 1)
+            return false;
+        if (y == 0 || y == width + 1)
+            return false;
+        return true;
     }
 
     private void AddEmbankement()
     {
         for (int i = 1; i <= width; ++i)
         {
-            map[1][i].Add(Embankment);
+            map[1][i].Add(Inventory.CloneTile(Embankment));
         }
         for (int i = 1; i <= width; ++i)
         {
-            map[length][i].Add(Embankment);
+            map[length][i].Add(Inventory.CloneTile(Embankment));
         }
     }
 

@@ -441,7 +441,7 @@ MonoBehaviour:
   Pillar: {fileID: 9184732652808123988}
   PullPoint: {fileID: 5456404420189433644}
   Text: {fileID: 3423642103396978656}
-  Addon: 1
+  Addon: 0
   Static: 0
 --- !u!1 &5456404420189433644
 GameObject:

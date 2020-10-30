@@ -32,11 +32,18 @@ public class Inventory : MonoBehaviour
     {
         return inventorySlot == null;
     }
+
     public static int InventoryValue()
     {
         if (inventorySlot == null)
             return 0;
         return inventorySlot.Cost;
+    }
+    public static bool TileIsAddon()
+    {
+        if (inventorySlot == null)
+            return false;
+        return inventorySlot.Addon;
     }
 
     public static bool TryAddItem(Tile item)
@@ -110,5 +117,11 @@ public class Inventory : MonoBehaviour
     private static void SetMoneyHud()
     {
         dMoney.text = "$" + Inventory.money;
+    }
+
+    public static Tile CloneTile(Tile tile)
+    {
+        GameObject g = Instantiate(tile.gameObject);
+        return g.GetComponent<Tile>();
     }
 }

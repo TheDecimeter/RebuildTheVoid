@@ -40,7 +40,7 @@ public class PlayerMovement : MonoBehaviour
         t.OnTouchUpdate(this);
         ThrustCheck();
         ActionCheck(t);
-        if(!PlaceTile(t))
+        if(!PlaceTileIntoVoid(t))
             BounceCheck(t);
     }
 
@@ -186,12 +186,14 @@ public class PlayerMovement : MonoBehaviour
         return;
     }
 
-    private bool PlaceTile(Tile t)
+    private bool PlaceTileIntoVoid(Tile t)
     {
         if (buttonPressed)
             return false;
+        if (t == currentTile || Safe(t)|| !Level.LegalSpot(t))
+            return false;
 
-        if (t == currentTile || Safe(t))
+        if (Inventory.TileIsAddon())
             return false;
 
         Tile item;

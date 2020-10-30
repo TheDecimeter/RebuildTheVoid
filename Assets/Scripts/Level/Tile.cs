@@ -32,7 +32,7 @@ public class Tile : MonoBehaviour
 
     private int tileHeight = 1, x, y;
 
-    private List<Tile> additions = new List<Tile>();
+    private Stack<Tile> additions = new Stack<Tile>();
 
     public void SetPos(int x, int y)
     {
@@ -43,16 +43,17 @@ public class Tile : MonoBehaviour
 
     public void UpdateHeight()
     {
-        Vector3 pos = new Vector3(Pillar.transform.position.x, StackSize * tileHeight, Pillar.transform.position.z);
-        Floor.transform.localScale = new Vector3(10, tileHeight * StackSize, 10);
-        Floor.transform.position = new Vector3(Floor.transform.position.x, StackSize/2 * tileHeight, Floor.transform.position.z);
+        float h = StackSize * tileHeight;
+        //Vector3 pos = new Vector3(Pillar.transform.position.x, h, Pillar.transform.position.z);
+        Floor.transform.localScale = new Vector3(10, h, 10);
+        Floor.transform.position = new Vector3(Floor.transform.position.x, h, Floor.transform.position.z);
 
-        Pillar.transform.position = pos;
+        Pillar.transform.position = new Vector3(Pillar.transform.position.x, h, Pillar.transform.position.z);
 
-        foreach (Tile t in additions)
-        {
-            t.transform.position = pos;
-        }
+        //foreach (Tile t in additions)
+        //{
+        //    t.transform.position = pos;
+        //}
     }
 
     public void OnTouchUpdate(PlayerMovement player)
@@ -74,11 +75,11 @@ public class Tile : MonoBehaviour
     {
         if (Static)
         {
-            print("Tile, can't add to static tile");
+            Debug.LogError("Tile.cs, can't add to static tile");
             return;
         }
 
-        if (tile.Addon)
+        if (!tile.Addon || StackSize==0)
         {
             if (StackSize == 0)
             {
@@ -88,9 +89,15 @@ public class Tile : MonoBehaviour
             StackSize++;
             print("adding stack size for " + x + " " + y+ "  stack size ="+StackSize);
         }
-        GameObject g = Instantiate(tile.gameObject);
-        g.transform.position = LevelController.PhysicalLocation(x, y);
-        additions.Add(g.GetComponent<Tile>());
+
+        //GameObject g = Instantiate(tile.gameObject);
+        //g.name = "addon for (" + x + "," + y + ")";
+        //g.transform.position = LevelController.PhysicalLocation(x, y);
+        //g.transform.SetParent(Pillar.transform);
+
+        tile.transform.position= LevelController.PhysicalLocation(x, y);
+        tile.transform.SetParent(Pillar.transform);
+        additions.Push(tile);
 
         UpdateHeight();
         Static = tile.Static;
@@ -100,25 +107,34 @@ public class Tile : MonoBehaviour
     {
         if (action == null)
             return;
+        if (this.action != null)
+            Destroy(this.action.gameObject);
+
         print("adding action " + x + " " + y);
 
         GameObject g = Instantiate(action.gameObject);
         g.name = "Action for Tile(" + x + "," + y + ")";
-
-        //this.action = gameObject.AddComponent<TileAction>();
-        //this.action.Copy(action);
+        
         this.action = g.GetComponent<TileAction>();
         this.action.Init(this);
     }
-    public void Action(PlayerMovement player)
+    public bool Action(PlayerMovement player)
     {
-        if(action==null)
-        {
-            print("action fired, but tile has no action");
-            return;
-        }
-
+        if (action == null)
+            return false;
         action.Action(player);
+        return true;
 
+        //if (Inventory.IsEmpty())
+        //{
+        //    Inventory.TryAddItem(WrapTopLayer());
+        //    //see if player needs to be kicked back
+        //}
+    }
+
+    ~Tile()
+    {
+        while (additions.Count > 0)
+            Destroy(additions.Pop());
     }
 }

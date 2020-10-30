@@ -12,6 +12,7 @@ public class TileBuying : TileAction
     public float PurchaseMessageDelay = 5;
 
     public Tile TileToSell;
+    private Tile realTileToSell;
 
     private Tile homeTile;
 
@@ -29,33 +30,40 @@ public class TileBuying : TileAction
 
         this.homeTile = tile;
         this.homeTile.Text.Show(ToutMessage);
+
+        realTileToSell = Inventory.CloneTile(TileToSell);
     }
+    
 
     public override void Action(PlayerMovement player)
     {
-        if (!Inventory.SellPlayerAnItem(TileToSell))
+        if (Inventory.SellPlayerAnItem(realTileToSell))
         {
-            Tile item;
-            if(Inventory.BuyPlayersItem(out item)){
-                homeTile.Text.Show(SalesMessage);
-                homeTile.Text.Show(OnBoughtItemFromYou, PurchaseMessageDelay);
-            }
+            SellPlayerTheTile();
+            realTileToSell = Inventory.CloneTile(TileToSell);
         }
         else
         {
-            BuyMessage = BuyMessage.Replace("@c", "" + Inventory.InventoryValue());
-            homeTile.Text.Show(BuyMessage);
-            homeTile.Text.Show(OnSoldItemToYou, PurchaseMessageDelay);
+            BuyPlayersTile();
         }
         
     }
 
-    public override void Copy(TileAction original)
+    private void SellPlayerTheTile()
     {
-        if (original is TileBuying)
+        BuyMessage = BuyMessage.Replace("@c", "" + Inventory.InventoryValue());
+        homeTile.Text.Show(BuyMessage);
+        homeTile.Text.Show(OnSoldItemToYou, PurchaseMessageDelay);
+    }
+
+    private void BuyPlayersTile()
+    {
+        Tile item;
+        if (Inventory.BuyPlayersItem(out item))
         {
-            TileBuying o = (TileBuying)original;
-            this.TileToSell = o.TileToSell;
+            homeTile.Text.Show(SalesMessage);
+            homeTile.Text.Show(OnBoughtItemFromYou, PurchaseMessageDelay);
+            Destroy(item.gameObject);
         }
     }
 
