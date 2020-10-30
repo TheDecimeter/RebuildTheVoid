@@ -13,6 +13,8 @@ public class Tile : MonoBehaviour
     public bool Addon = false;
     public bool Static=false;
 
+    public LevelController Level { get; set; }
+
 
     private TileAction action;
 
@@ -30,7 +32,9 @@ public class Tile : MonoBehaviour
         }
     }
 
-    private int tileHeight = 1, x, y;
+    private int tileHeight = 1;
+    public int x { get; protected set; }
+    public int y { get; protected set; }
 
     private Stack<Tile> Tiles = new Stack<Tile>();
     private List<Tile> Addons = new List<Tile>();
@@ -70,6 +74,10 @@ public class Tile : MonoBehaviour
     {
         if (action != null)
             action.OnTouchBegin(player);
+        else
+        {
+            player.UpdateActionMessage(null);
+        }
     }
 
     public void Add(IEnumerable<Tile> tiles)
@@ -87,32 +95,9 @@ public class Tile : MonoBehaviour
             else
                 AddSolidTile(t);
         }
+
+        
     }
-
-    //private void Add(Tile tile)
-    //{
-    //    if (Static)
-    //    {
-    //        return;
-    //    }
-
-    //    if (!tile.Addon)
-    //    {
-    //        if (StackSize == 0)
-    //        {
-    //            Floor.gameObject.SetActive(true);
-    //            Pillar.gameObject.SetActive(true);
-    //        }
-    //        StackSize++;
-    //    }
-
-    //    tile.transform.position= LevelController.PhysicalLocation(x, y);
-    //    tile.transform.SetParent(Pillar.transform);
-    //    Tiles.Push(tile);
-
-    //    UpdateHeight();
-    //    Static = tile.Static;
-    //}
 
     private void AddAddon(Tile tile)
     {
@@ -135,6 +120,8 @@ public class Tile : MonoBehaviour
 
         UpdateHeight();
         Static = tile.Static;
+
+        Level.TileChanged(this);
     }
 
     public void AddAction(TileAction action)
@@ -184,6 +171,9 @@ public class Tile : MonoBehaviour
         }
         else
             UpdateHeight();
+
+
+        Level.TileChanged(this);
 
         return Inventory.Multi(t);
     }

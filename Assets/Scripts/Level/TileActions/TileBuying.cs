@@ -74,11 +74,13 @@ public class TileBuying : TileAction
         if (Inventory.IsEmpty())
         {
             homeTile.Text.Show(SalesMessage);
+            player.UpdateActionMessage("Buy");
         }
         else
         {
             BuyMessage = BuyMessage.Replace("@c", "" + Inventory.InventoryValue());
             homeTile.Text.Show(BuyMessage);
+            player.UpdateActionMessage("Sell");
         }
     }
     public override void OnTouchUpdate(PlayerMovement player)

@@ -11,25 +11,40 @@ public class LevelController : MonoBehaviour
     public LevelConfig CurrentLevel;
 
     public float tileSize = 10;
+
+    public WorkerBFS[] WorkerGoals;
+
     private static float tileSizeStat;
     private static Tile nullTile;
     private static int length, width;
 
     private Tile[][] map;
 
+    private static float ox, oy;
+
+    private delegate void UpdateMap();
+    UpdateMap runBFS;
+
     // Start is called before the first frame update
     void Start()
     {
+        ox = transform.position.x;
+        oy = transform.position.z;
         tileSizeStat = tileSize;
         //GenerateLevel(7, 5);
         //AddEmbankement();
 
+        runBFS = V;
+
         GenerateLevel(CurrentLevel.Length, CurrentLevel.Width);
         AddStartTiles(CurrentLevel.Tiles);
-        
+
+        InitNPCPaths();
+        runBFS = SetNPCPaths;
 
         nullTile = Instantiate(TileTemplate);
         nullTile.name = "nullTile";
+
     }
 
     private void GenerateLevel(int length, int width)
@@ -39,16 +54,17 @@ public class LevelController : MonoBehaviour
 
     private void ResetMap(int length, int width)
     {
-        map = new Tile[length+2][];
-        for (int i = 0; i < length+2; ++i)
-            map[i] = new Tile[width+2];
+        map = new Tile[length + 2][];
+        for (int i = 0; i < length + 2; ++i)
+            map[i] = new Tile[width + 2];
 
         for (int x = 1; x <= length; ++x)
             for (int y = 1; y <= width; ++y)
             {
                 GameObject g = Instantiate(TileTemplate.gameObject);
                 g.name = "Tile (" + x + "," + y + ")";
-                Tile t= g.GetComponent<Tile>();
+                Tile t = g.GetComponent<Tile>();
+                t.Level = this;
                 map[x][y] = t;
                 t.SetPos(x, y);
             }
@@ -56,7 +72,7 @@ public class LevelController : MonoBehaviour
         LevelController.width = width;
     }
 
-    private void AddStartTiles(LevelConfig.TileConfig [] tiles)
+    private void AddStartTiles(LevelConfig.TileConfig[] tiles)
     {
         foreach (LevelConfig.TileConfig tile in tiles)
         {
@@ -98,14 +114,14 @@ public class LevelController : MonoBehaviour
 
     public static Vector3 PhysicalLocation(int x, int y)
     {
-        return new Vector3(x * tileSizeStat+ tileSizeStat*.5f, 0, y * tileSizeStat + tileSizeStat *.5f);
+        return new Vector3((x) * tileSizeStat + tileSizeStat * .5f + ox, 0, (y) * tileSizeStat + tileSizeStat * .5f + oy);
     }
 
     public static void MapLocation(GameObject g, out int x, out int y)
     {
         Vector3 pos = g.transform.position;
-        x = (int)((pos.x) / tileSizeStat);
-        y = (int)((pos.z) / tileSizeStat);
+        x = (int)((pos.x - ox) / tileSizeStat);
+        y = (int)((pos.z - oy) / tileSizeStat);
     }
 
     public Tile MapTile(GameObject g)
@@ -122,5 +138,23 @@ public class LevelController : MonoBehaviour
         if (!(x >= 1 && x <= length && y >= 1 && y <= width))
             return nullTile;
         return map[x][y];
+    }
+
+    public void V() {}
+
+    public void SetNPCPaths()
+    {
+        foreach (WorkerBFS goal in WorkerGoals)
+            goal.UpdatePaths(map);
+    }
+    public void InitNPCPaths()
+    {
+        foreach (WorkerBFS goal in WorkerGoals)
+            goal.Set(map);
+    }
+
+    public void TileChanged(Tile t)
+    {
+        runBFS();
     }
 }

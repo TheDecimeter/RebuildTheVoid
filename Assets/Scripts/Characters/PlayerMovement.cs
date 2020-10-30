@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class PlayerMovement : MonoBehaviour
     public Grapple GrappleObject;
     public Inventory Inventory;
     public Camera Camera;
+
+    public TextMeshProUGUI ActionHUD;
 
 
     private bool buttonPressed = false, actionPerformed = false, Launching = false, launched = false;
@@ -128,6 +131,23 @@ public class PlayerMovement : MonoBehaviour
 
             
         }
+    }
+
+    public void UpdateActionMessage(string msg)
+    {
+        if (msg == null)
+        {
+            if (currentTile.Static)
+                ActionHUD.text = "Nothing";
+            else
+            {
+                if (Inventory.IsEmpty())
+                    ActionHUD.text = "Get Tile";
+                else
+                    ActionHUD.text = "Stack Tile";
+            }
+        }
+
     }
 
 
