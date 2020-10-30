@@ -33,10 +33,10 @@ public class TileBuying : TileAction
 
     public override void Action(PlayerMovement player)
     {
-        if (!Inventory.TrySellItem(TileToSell))
+        if (!Inventory.SellPlayerAnItem(TileToSell))
         {
             Tile item;
-            if(Inventory.TryBuyItem(out item)){
+            if(Inventory.BuyPlayersItem(out item)){
                 homeTile.Text.Show(SalesMessage);
                 homeTile.Text.Show(OnBoughtItemFromYou, PurchaseMessageDelay);
             }
@@ -78,7 +78,7 @@ public class TileBuying : TileAction
 
     public override void OnTouchLeft(PlayerMovement player)
     {
-        print("left, showing tout message " + ToutMessage);
+        //print("left, showing tout message " + ToutMessage);
         homeTile.Text.Show(ToutMessage);
     }
 }

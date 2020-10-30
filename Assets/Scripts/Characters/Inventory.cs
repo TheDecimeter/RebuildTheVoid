@@ -73,29 +73,34 @@ public class Inventory : MonoBehaviour
         if (money > Inventory.money)
             return false;
         Inventory.money -= money;
+        //print("  removing " + money + " dollars, " + Inventory.money);
         dMoney.text = "$" + Inventory.money;
         return true;
     }
 
     public static void AddMoney(int money)
     {
+        int preInv = Inventory.money;
         Inventory.money += money;
+        //print("adding " + money + " dollars to "+preInv+", " + Inventory.money);
         dMoney.text = "$" + Inventory.money;
     }
 
 
-    public static bool TrySellItem(Tile item)
+    public static bool SellPlayerAnItem(Tile item)
     {
         if (money < item.Cost)
             return false;
-        TryGetMoney(item.Cost);
-        return TryAddItem(item);
+        if (!TryAddItem(item))
+            return false;
+        return TryGetMoney(item.Cost);
     }
 
-    public static bool TryBuyItem(out Tile item)
+    public static bool BuyPlayersItem(out Tile item)
     {
         if (!TryGetItem(out item))
             return false;
+        print("item is being bought by NPC " + item.Cost);
         AddMoney(item.Cost);
         return true;
     }
