@@ -60,7 +60,7 @@ public class LevelController : MonoBehaviour
     {
         foreach (LevelConfig.TileConfig tile in tiles)
         {
-            map[tile.x][tile.y].Add(Inventory.CloneTile(tile.TileTemplate));
+            map[tile.x][tile.y].Add(Inventory.Multi(Inventory.CloneTile(tile.TileTemplate)));
             map[tile.x][tile.y].AddAction(tile.Action);
         }
     }
@@ -80,11 +80,11 @@ public class LevelController : MonoBehaviour
     {
         for (int i = 1; i <= width; ++i)
         {
-            map[1][i].Add(Inventory.CloneTile(Embankment));
+            map[1][i].Add(Inventory.Multi(Inventory.CloneTile(Embankment)));
         }
         for (int i = 1; i <= width; ++i)
         {
-            map[length][i].Add(Inventory.CloneTile(Embankment));
+            map[length][i].Add(Inventory.Multi(Inventory.CloneTile(Embankment)));
         }
     }
 
@@ -114,14 +114,13 @@ public class LevelController : MonoBehaviour
         MapLocation(g, out x, out y);
         if (!(x >= 1 && x <= length && y >= 1 && y <= width))
             return nullTile;
-        //print("providing pillar " + x + " " + y);
+
         return map[x][y];
     }
     public Tile MapTile(int x, int y)
     {
         if (!(x >= 1 && x <= length && y >= 1 && y <= width))
             return nullTile;
-        //print("providing pillar " + x + " " + y);
         return map[x][y];
     }
 }

@@ -196,7 +196,7 @@ public class PlayerMovement : MonoBehaviour
         if (Inventory.TileIsAddon())
             return false;
 
-        Tile item;
+        IEnumerable<Tile> item;
         if (!Inventory.TryGetItem(out item))
             return false;
 

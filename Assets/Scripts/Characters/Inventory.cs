@@ -8,8 +8,9 @@ public class Inventory : MonoBehaviour
     public TextMeshProUGUI MoneyDisplay;
     public TextMeshProUGUI InventoryDisplay;
     
-    private static Tile inventorySlot;
-    private static int money;
+    private static IEnumerable<Tile> inventorySlot;
+    private static int money, tileValue;
+    private static bool addon;
 
     private static TextMeshProUGUI dMoney;
     private static TextMeshProUGUI dInventory;
@@ -23,7 +24,10 @@ public class Inventory : MonoBehaviour
         else
             print("dInventory isn't null");
         inventorySlot = null;
+
         money = 6;
+        addon = false;
+        tileValue = 0;
 
         SetMoneyHud();
     }
@@ -37,37 +41,54 @@ public class Inventory : MonoBehaviour
     {
         if (inventorySlot == null)
             return 0;
-        return inventorySlot.Cost;
+        return tileValue;
     }
     public static bool TileIsAddon()
     {
         if (inventorySlot == null)
             return false;
-        return inventorySlot.Addon;
+        return addon;
     }
 
-    public static bool TryAddItem(Tile item)
+    public static bool TryAddItem(IEnumerable<Tile> item)
     {
         if (inventorySlot == null)
         {
-            print("inventory adding " + item.Name);
-            if (dInventory == null)
-                print("dInventory is null");
-            inventorySlot = item;
-            dInventory.text = item.Name;
+            fillInventorySlot(item);
             return true;
         }
         else
             return false;
     }
 
-    public static bool TryGetItem(out Tile item)
+    private static void fillInventorySlot(IEnumerable<Tile> tile)
+    {
+        inventorySlot = tile;
+        tileValue = 0;
+        addon = false;
+        string n = "";
+        foreach(Tile t in tile)
+        {
+            if (t.Addon)
+                addon = true;
+            tileValue += t.Cost;
+            n += " " + t.Name;
+        }
+        if (addon)
+            dInventory.text = "Addon:" + n;
+        else
+            dInventory.text = "Tile:" + n;
+    }
+
+    public static bool TryGetItem(out IEnumerable<Tile> item)
     {
         if (inventorySlot != null)
         {
             item = inventorySlot;
             dInventory.text = "No Item";
             inventorySlot = null;
+            tileValue = 0;
+            addon = false;
             return true;
         }
         else
@@ -100,16 +121,16 @@ public class Inventory : MonoBehaviour
     {
         if (money < item.Cost)
             return false;
-        if (!TryAddItem(item))
+        if (!TryAddItem(Multi(item)))
             return false;
         return TryGetMoney(item.Cost);
     }
 
-    public static bool BuyPlayersItem(out Tile item)
+    public static bool BuyPlayersItem(out IEnumerable<Tile> item)
     {
         if (!TryGetItem(out item))
             return false;
-        AddMoney(item.Cost);
+        AddMoney(tileValue);
         return true;
     }
 
@@ -119,6 +140,10 @@ public class Inventory : MonoBehaviour
         dMoney.text = "$" + Inventory.money;
     }
 
+    public static IEnumerable<Tile> Multi(Tile tile)
+    {
+        yield return tile;
+    }
     public static Tile CloneTile(Tile tile)
     {
         GameObject g = Instantiate(tile.gameObject);

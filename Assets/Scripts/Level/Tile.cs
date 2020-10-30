@@ -32,7 +32,8 @@ public class Tile : MonoBehaviour
 
     private int tileHeight = 1, x, y;
 
-    private Stack<Tile> additions = new Stack<Tile>();
+    private Stack<Tile> Tiles = new Stack<Tile>();
+    private List<Tile> Addons = new List<Tile>();
 
     public void SetPos(int x, int y)
     {
@@ -71,15 +72,29 @@ public class Tile : MonoBehaviour
             action.OnTouchBegin(player);
     }
 
-    public void Add(Tile tile)
+    public void Add(IEnumerable<Tile> tiles)
+    {
+        if (Static)
+            return;
+
+        foreach (Tile t in tiles)
+        {
+            if (t.Addon)
+                AddAddon(t);
+            else
+                AddSolidTile(t);
+        }
+            //Add(t);
+    }
+
+    private void Add(Tile tile)
     {
         if (Static)
         {
-            Debug.LogError("Tile.cs, can't add to static tile");
             return;
         }
 
-        if (!tile.Addon || StackSize==0)
+        if (!tile.Addon)
         {
             if (StackSize == 0)
             {
@@ -87,17 +102,34 @@ public class Tile : MonoBehaviour
                 Pillar.gameObject.SetActive(true);
             }
             StackSize++;
-            print("adding stack size for " + x + " " + y+ "  stack size ="+StackSize);
         }
-
-        //GameObject g = Instantiate(tile.gameObject);
-        //g.name = "addon for (" + x + "," + y + ")";
-        //g.transform.position = LevelController.PhysicalLocation(x, y);
-        //g.transform.SetParent(Pillar.transform);
 
         tile.transform.position= LevelController.PhysicalLocation(x, y);
         tile.transform.SetParent(Pillar.transform);
-        additions.Push(tile);
+        Tiles.Push(tile);
+
+        UpdateHeight();
+        Static = tile.Static;
+    }
+
+    private void AddAddon(Tile tile)
+    {
+        tile.transform.position = LevelController.PhysicalLocation(x, y);
+        tile.transform.SetParent(Pillar.transform);
+        Addons.Add(tile);
+    }
+    private void AddSolidTile(Tile tile)
+    {
+        if (StackSize == 0)
+        {
+            Floor.gameObject.SetActive(true);
+            Pillar.gameObject.SetActive(true);
+        }
+        StackSize++;
+        
+        tile.transform.position = LevelController.PhysicalLocation(x, y);
+        tile.transform.SetParent(Pillar.transform);
+        Tiles.Push(tile);
 
         UpdateHeight();
         Static = tile.Static;
@@ -109,11 +141,9 @@ public class Tile : MonoBehaviour
             return;
         if (this.action != null)
             Destroy(this.action.gameObject);
-
-        print("adding action " + x + " " + y);
+        
 
         GameObject g = Instantiate(action.gameObject);
-        g.name = "Action for Tile(" + x + "," + y + ")";
         
         this.action = g.GetComponent<TileAction>();
         this.action.Init(this);
@@ -124,17 +154,11 @@ public class Tile : MonoBehaviour
             return false;
         action.Action(player);
         return true;
-
-        //if (Inventory.IsEmpty())
-        //{
-        //    Inventory.TryAddItem(WrapTopLayer());
-        //    //see if player needs to be kicked back
-        //}
     }
 
     ~Tile()
     {
-        while (additions.Count > 0)
-            Destroy(additions.Pop());
+        while (Tiles.Count > 0)
+            Destroy(Tiles.Pop());
     }
 }

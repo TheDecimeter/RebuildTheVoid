@@ -58,12 +58,13 @@ public class TileBuying : TileAction
 
     private void BuyPlayersTile()
     {
-        Tile item;
+        IEnumerable<Tile> item;
         if (Inventory.BuyPlayersItem(out item))
         {
             homeTile.Text.Show(SalesMessage);
             homeTile.Text.Show(OnBoughtItemFromYou, PurchaseMessageDelay);
-            Destroy(item.gameObject);
+            foreach(Tile t in item)
+                Destroy(t.gameObject);
         }
     }
 
