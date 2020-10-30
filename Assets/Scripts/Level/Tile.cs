@@ -72,7 +72,13 @@ public class Tile : MonoBehaviour
 
     public void Add(Tile tile)
     {
-        if (!tile.Addon)
+        if (Static)
+        {
+            print("Tile, can't add to static tile");
+            return;
+        }
+
+        if (tile.Addon)
         {
             if (StackSize == 0)
             {
@@ -80,13 +86,14 @@ public class Tile : MonoBehaviour
                 Pillar.gameObject.SetActive(true);
             }
             StackSize++;
-            //print("adding stack size for " + x + " " + y+ "  stack size ="+StackSize);
+            print("adding stack size for " + x + " " + y+ "  stack size ="+StackSize);
         }
         GameObject g = Instantiate(tile.gameObject);
         g.transform.position = LevelController.PhysicalLocation(x, y);
         additions.Add(g.GetComponent<Tile>());
 
         UpdateHeight();
+        Static = tile.Static;
     }
 
     public void AddAction(TileAction action)

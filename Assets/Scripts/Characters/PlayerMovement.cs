@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     public Camera Camera;
 
 
-    private bool pressed = false, actionPerformed = false, wasSafe=true;
+    private bool buttonPressed = false, actionPerformed = false, wasSafe=true;
     private Vector3 pillar, pullPoint;
 
     private float tileWidth = 4.5f;
@@ -40,16 +40,17 @@ public class PlayerMovement : MonoBehaviour
         t.OnTouchUpdate(this);
         ThrustCheck();
         ActionCheck(t);
-        BounceCheck(t);
+        if(!PlaceTile(t))
+            BounceCheck(t);
     }
 
     private void ThrustCheck()
     {
         if (Input.anyKey)
         {
-            if (!pressed)
+            if (!buttonPressed)
             {
-                pressed = true;
+                buttonPressed = true;
                 Tile t = Level.MapTile(gameObject);
                 if (Safe(t))
                 {
@@ -72,14 +73,14 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            if (pressed)
+            if (buttonPressed)
             {
                 if (holdTimer < thrustTime)
                     print("press");
                 holdTimer = 0;
                 deltaAngle = 0;
                 deltaAngleAction = 0;
-                pressed = false;
+                buttonPressed = false;
                 actionPerformed = false;
                 GrappleObject.Retract();
             }
@@ -183,6 +184,22 @@ public class PlayerMovement : MonoBehaviour
         }
 
         return;
+    }
+
+    private bool PlaceTile(Tile t)
+    {
+        if (buttonPressed)
+            return false;
+
+        if (t == currentTile || Safe(t))
+            return false;
+
+        Tile item;
+        if (!Inventory.TryGetItem(out item))
+            return false;
+
+        t.Add(item);
+        return true;
     }
 
     private Vector3 GetHeading(Vector3 pillarPos)

@@ -254,7 +254,7 @@ MonoBehaviour:
   Pillar: {fileID: 0}
   PullPoint: {fileID: 0}
   Text: {fileID: 0}
-  Addon: 0
+  Addon: 1
   Static: 1
 --- !u!1 &5736966429929995657
 GameObject:

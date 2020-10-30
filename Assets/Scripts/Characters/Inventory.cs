@@ -24,6 +24,8 @@ public class Inventory : MonoBehaviour
             print("dInventory isn't null");
         inventorySlot = null;
         money = 6;
+
+        SetMoneyHud();
     }
 
     public static bool IsEmpty()
@@ -74,7 +76,7 @@ public class Inventory : MonoBehaviour
             return false;
         Inventory.money -= money;
         //print("  removing " + money + " dollars, " + Inventory.money);
-        dMoney.text = "$" + Inventory.money;
+        SetMoneyHud();
         return true;
     }
 
@@ -83,7 +85,7 @@ public class Inventory : MonoBehaviour
         int preInv = Inventory.money;
         Inventory.money += money;
         //print("adding " + money + " dollars to "+preInv+", " + Inventory.money);
-        dMoney.text = "$" + Inventory.money;
+        SetMoneyHud();
     }
 
 
@@ -100,9 +102,13 @@ public class Inventory : MonoBehaviour
     {
         if (!TryGetItem(out item))
             return false;
-        print("item is being bought by NPC " + item.Cost);
         AddMoney(item.Cost);
         return true;
     }
 
+
+    private static void SetMoneyHud()
+    {
+        dMoney.text = "$" + Inventory.money;
+    }
 }
