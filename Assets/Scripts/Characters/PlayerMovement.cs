@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     public LevelController Level;
     public float Acceleration;
+    public float LaunchPower;
     public Grapple GrappleObject;
     public Inventory Inventory;
     public Camera Camera;
@@ -22,7 +23,7 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 lastDirToPillar;
 
-    private Tile currentTile,previousTile;
+    private Tile currentTile,previousTile, previousEmbankment;
 
     private int tileX, tileZ;
 
@@ -109,7 +110,12 @@ public class PlayerMovement : MonoBehaviour
                     {
                         print("player performed action");
                         actionPerformed = true;
-                        t.Action(this);
+                        if(!t.Action(this)){
+                            if (Inventory.IsEmpty())
+                                GetTile(t);
+                            else
+                                PlaceTileOnTop(t);
+                        }
                     }
                 }
                 else
@@ -179,11 +185,45 @@ public class PlayerMovement : MonoBehaviour
                 t.OnTouchBegin(this);
                 previousTile = currentTile;
                 currentTile = t;
+                if (t.Static)
+                    previousEmbankment = t;
                 LevelController.MapLocation(gameObject, out this.tileX, out tileZ);
             }
         }
 
         return;
+    }
+
+    private void GetTile(Tile t)
+    {
+        Inventory.TryAddItem(t.GetTopLayer());
+        if (!Safe(t))
+            LaunchHomewards();
+        
+    }
+    private void PlaceTileOnTop(Tile t)
+    {
+        IEnumerable<Tile> tiles;
+        if (Inventory.TryGetItem(out tiles))
+            t.Add(tiles);
+    }
+
+    private void LaunchHomewards()
+    {
+        if (Safe(previousTile))
+            LaunchToward(previousTile);
+        else
+            LaunchToward(previousEmbankment);
+        
+    }
+    private void LaunchToward(Tile t)
+    {
+        pillar = t.Pillar.transform.position;
+        pullPoint = t.PullPoint.transform.position;
+
+        Vector3 dir = pullPoint - this.transform.position;
+        dir.Normalize();
+        rb.velocity = new Vector3(dir.x, 2, dir.z)*LaunchPower;
     }
 
     private bool PlaceTileIntoVoid(Tile t)

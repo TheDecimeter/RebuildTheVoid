@@ -19,10 +19,7 @@ public class Inventory : MonoBehaviour
     {
         dMoney = MoneyDisplay;
         dInventory = InventoryDisplay;
-        if (dInventory == null)
-            print("dInventory is null");
-        else
-            print("dInventory isn't null");
+        
         inventorySlot = null;
 
         money = 6;
@@ -54,14 +51,14 @@ public class Inventory : MonoBehaviour
     {
         if (inventorySlot == null)
         {
-            fillInventorySlot(item);
+            FillInventorySlot(item);
             return true;
         }
         else
             return false;
     }
 
-    private static void fillInventorySlot(IEnumerable<Tile> tile)
+    private static void FillInventorySlot(IEnumerable<Tile> tile)
     {
         inventorySlot = tile;
         tileValue = 0;
@@ -73,6 +70,7 @@ public class Inventory : MonoBehaviour
                 addon = true;
             tileValue += t.Cost;
             n += " " + t.Name;
+            t.gameObject.SetActive(false);
         }
         if (addon)
             dInventory.text = "Addon:" + n;
@@ -130,7 +128,7 @@ public class Inventory : MonoBehaviour
     {
         if (!TryGetItem(out item))
             return false;
-        AddMoney(tileValue);
+        AddMoney(TileCost(item));
         return true;
     }
 
@@ -148,5 +146,13 @@ public class Inventory : MonoBehaviour
     {
         GameObject g = Instantiate(tile.gameObject);
         return g.GetComponent<Tile>();
+    }
+
+    public static int TileCost(IEnumerable<Tile> tiles)
+    {
+        int r = 0;
+        foreach (Tile t in tiles)
+            r += t.Cost;
+        return r;
     }
 }

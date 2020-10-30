@@ -1257,6 +1257,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Level: {fileID: 930665027}
   Acceleration: 30
+  LaunchPower: 5
   GrappleObject: {fileID: 543454047}
   Inventory: {fileID: 0}
   Camera: {fileID: 534669904}

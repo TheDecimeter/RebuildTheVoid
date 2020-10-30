@@ -80,37 +80,39 @@ public class Tile : MonoBehaviour
         foreach (Tile t in tiles)
         {
             if (t.Addon)
+            {
+                t.gameObject.SetActive(true);
                 AddAddon(t);
+            }
             else
                 AddSolidTile(t);
         }
-            //Add(t);
     }
 
-    private void Add(Tile tile)
-    {
-        if (Static)
-        {
-            return;
-        }
+    //private void Add(Tile tile)
+    //{
+    //    if (Static)
+    //    {
+    //        return;
+    //    }
 
-        if (!tile.Addon)
-        {
-            if (StackSize == 0)
-            {
-                Floor.gameObject.SetActive(true);
-                Pillar.gameObject.SetActive(true);
-            }
-            StackSize++;
-        }
+    //    if (!tile.Addon)
+    //    {
+    //        if (StackSize == 0)
+    //        {
+    //            Floor.gameObject.SetActive(true);
+    //            Pillar.gameObject.SetActive(true);
+    //        }
+    //        StackSize++;
+    //    }
 
-        tile.transform.position= LevelController.PhysicalLocation(x, y);
-        tile.transform.SetParent(Pillar.transform);
-        Tiles.Push(tile);
+    //    tile.transform.position= LevelController.PhysicalLocation(x, y);
+    //    tile.transform.SetParent(Pillar.transform);
+    //    Tiles.Push(tile);
 
-        UpdateHeight();
-        Static = tile.Static;
-    }
+    //    UpdateHeight();
+    //    Static = tile.Static;
+    //}
 
     private void AddAddon(Tile tile)
     {
@@ -141,7 +143,8 @@ public class Tile : MonoBehaviour
             return;
         if (this.action != null)
             Destroy(this.action.gameObject);
-        
+
+        print("setting action for " + x + " " + y);
 
         GameObject g = Instantiate(action.gameObject);
         
@@ -151,9 +154,36 @@ public class Tile : MonoBehaviour
     public bool Action(PlayerMovement player)
     {
         if (action == null)
+        {
+            print("no action for " + x + " " + y);
             return false;
+        }
+        print("yes action for " + x + " " + y);
         action.Action(player);
         return true;
+    }
+
+    public IEnumerable<Tile> GetTopLayer()
+    {
+        if (Addons.Count > 0)
+        {
+            List<Tile> r = Addons;
+            Addons = new List<Tile>();
+            return r;
+        }
+        print("getting top of tile ss:" + StackSize + " T.c" + Tiles.Count);
+        Tile t = Tiles.Pop();
+        StackSize--;
+
+        if (StackSize == 0)
+        {
+            Pillar.gameObject.SetActive(false);
+            Floor.gameObject.SetActive(false);
+        }
+        else
+            UpdateHeight();
+
+        return Inventory.Multi(t);
     }
 
     ~Tile()
