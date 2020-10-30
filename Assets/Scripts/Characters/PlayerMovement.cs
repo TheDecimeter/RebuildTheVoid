@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
     public Camera Camera;
 
 
-    private bool buttonPressed = false, actionPerformed = false, wasSafe=true;
+    private bool buttonPressed = false, actionPerformed = false, Launching = false, launched = false;
     private Vector3 pillar, pullPoint;
 
     private float tileWidth = 4.5f;
@@ -32,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        currentTile = Level.MapTile(gameObject);
     }
 
     // Update is called once per frame
@@ -41,8 +42,9 @@ public class PlayerMovement : MonoBehaviour
         t.OnTouchUpdate(this);
         ThrustCheck();
         ActionCheck(t);
-        if(!PlaceTileIntoVoid(t))
-            BounceCheck(t);
+        if (!PlaceTileIntoVoid(t))
+            if (!BounceCheck(t))
+                JumpCheck(t);
     }
 
     private void ThrustCheck()
@@ -128,9 +130,85 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void BounceCheck(Tile t)
+
+    private bool JumpCheck(Tile t)
     {
-        
+        float rbThresh = .01f;
+
+        if (launched)
+        {
+            if (rb.velocity.y > -rbThresh)
+                return false;
+
+            launched = false;
+        }
+
+        if (buttonPressed)
+            return false;
+
+        float tileCenter = tileWidth * 0.65f;
+        Vector3 dis = transform.position - currentTile.transform.position;
+        float launch = LaunchPower*1.5f;
+        if (dis.x > tileCenter)
+        {
+            if (StepUp(Level.MapTile(tileX + 1, tileZ)))
+            {
+                if (rb.velocity.x > rbThresh)
+                {
+                    velocityChange(new Vector3(rb.velocity.x, launch, rb.velocity.z));
+                    launched = true;
+                    return true;
+                }
+            }
+        }
+        else if (dis.x < -tileCenter)
+        {
+            if (StepUp(Level.MapTile(tileX - 1, tileZ)))
+            {
+                if (rb.velocity.x < -rbThresh)
+                {
+                    velocityChange(new Vector3(rb.velocity.x, launch, rb.velocity.z));
+                    launched = true;
+                    return true;
+                }
+            }
+        }
+        else if (dis.z > tileCenter)
+        {
+            if (StepUp(Level.MapTile(tileX, tileZ + 1)))
+            {
+                if (rb.velocity.z > rbThresh)
+                {
+                    velocityChange(new Vector3(rb.velocity.x, launch, rb.velocity.z));
+                    launched = true;
+                    return true;
+                }
+            }
+        }
+        else if (dis.z < -tileCenter)
+        {
+            if (StepUp(Level.MapTile(tileX, tileZ - 1)))
+            {
+                if (rb.velocity.z < -rbThresh)
+                {
+                    velocityChange(new Vector3(rb.velocity.x, launch, rb.velocity.z));
+                    launched = true;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void velocityChange(Vector3 vel)
+    {
+        rb.velocity = vel;
+    }
+
+
+    private bool BounceCheck(Tile t)
+    {
+
         if (t != currentTile)
         {
             //LevelController.MapLocation(gameObject, out x1, out z1);
@@ -138,8 +216,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (!Safe(t))
             {
-
-                int x=1, z=1;
+                int x = 1, z = 1;
                 Vector3 dis = transform.position - currentTile.transform.position;
                 if (dis.x > tileWidth)
                 {
@@ -176,28 +253,30 @@ public class PlayerMovement : MonoBehaviour
                 }
 
                 rb.velocity = new Vector3(rb.velocity.x * x, 0, rb.velocity.z * z);
+
+                return x == -1 || z == -1;
+                
             }
             else
             {
-                wasSafe = true;
-                if(currentTile!=null)
-                    currentTile.OnTouchLeft(this);
+                currentTile.OnTouchLeft(this);
                 t.OnTouchBegin(this);
                 previousTile = currentTile;
                 currentTile = t;
+                Launching = false;
                 if (t.Static)
                     previousEmbankment = t;
                 LevelController.MapLocation(gameObject, out this.tileX, out tileZ);
             }
         }
 
-        return;
+        return false;
     }
 
     private void GetTile(Tile t)
     {
         Inventory.TryAddItem(t.GetTopLayer());
-        if (!Safe(t))
+        if (!Solid(t))
             LaunchHomewards();
         
     }
@@ -210,7 +289,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void LaunchHomewards()
     {
-        if (Safe(previousTile))
+        if (Solid(previousTile))
             LaunchToward(previousTile);
         else
             LaunchToward(previousEmbankment);
@@ -224,13 +303,14 @@ public class PlayerMovement : MonoBehaviour
         Vector3 dir = pullPoint - this.transform.position;
         dir.Normalize();
         rb.velocity = new Vector3(dir.x, 2, dir.z)*LaunchPower;
+        Launching = true;
     }
 
     private bool PlaceTileIntoVoid(Tile t)
     {
         if (buttonPressed)
             return false;
-        if (t == currentTile || Safe(t)|| !Level.LegalSpot(t))
+        if (t == currentTile || !MoreThanAStepDown(t) || !Level.LegalSpot(t))
             return false;
 
         if (Inventory.TileIsAddon())
@@ -278,8 +358,37 @@ public class PlayerMovement : MonoBehaviour
         return new Vector3(heading.x, 0, heading.z);
     }
 
+    private bool Solid(Tile t)
+    {
+        return t.StackSize != 0;
+    }
+
     private bool Safe(Tile t)
     {
-        return t.StackSize > 0;
+        //return t.StackSize != 0;
+        if (t.StackSize == 0)
+            return false;
+        if (currentTile == null || currentTile.StackSize == 0)
+            return true;
+        if (t.StackSize + 1 == currentTile.StackSize)
+            return true;
+
+        return WithinOneHeight(t);
+    }
+
+    private bool WithinOneHeight(Tile t)
+    {
+        return (currentTile.StackSize - 1 <= t.StackSize && t.StackSize <= currentTile.StackSize + 1);
+    }
+
+    private bool MoreThanAStepDown(Tile t)
+    {
+        return currentTile.StackSize - t.StackSize > 1;
+    }
+
+    private bool StepUp(Tile t)
+    {
+        //return t.StackSize > currentTile.StackSize;
+        return t.StackSize - currentTile.StackSize == 1;
     }
 }

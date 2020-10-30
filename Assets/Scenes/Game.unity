@@ -329,6 +329,31 @@ MonoBehaviour:
     TileTemplate: {fileID: 4117277779626024780, guid: 6a28106950f56d24590cb330215bf256,
       type: 3}
     Action: {fileID: 0}
+  - x: 2
+    y: 1
+    TileTemplate: {fileID: 4117277779626024780, guid: 895801b132edd8747937283950534a70,
+      type: 3}
+    Action: {fileID: 0}
+  - x: 2
+    y: 1
+    TileTemplate: {fileID: 4117277779626024780, guid: 895801b132edd8747937283950534a70,
+      type: 3}
+    Action: {fileID: 0}
+  - x: 2
+    y: 2
+    TileTemplate: {fileID: 4117277779626024780, guid: 895801b132edd8747937283950534a70,
+      type: 3}
+    Action: {fileID: 0}
+  - x: 2
+    y: 2
+    TileTemplate: {fileID: 4117277779626024780, guid: 895801b132edd8747937283950534a70,
+      type: 3}
+    Action: {fileID: 0}
+  - x: 2
+    y: 2
+    TileTemplate: {fileID: 4117277779626024780, guid: 895801b132edd8747937283950534a70,
+      type: 3}
+    Action: {fileID: 0}
 --- !u!1 &525227032
 GameObject:
   m_ObjectHideFlags: 0

@@ -73,7 +73,7 @@ public class LevelController : MonoBehaviour
             return false;
         if (y == 0 || y == width + 1)
             return false;
-        return true;
+        return !t.Static;
     }
 
     private void AddEmbankement()
