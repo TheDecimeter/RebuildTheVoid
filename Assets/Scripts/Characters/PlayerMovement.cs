@@ -143,8 +143,8 @@ public class PlayerMovement : MonoBehaviour
             launched = false;
         }
 
-        if (buttonPressed)
-            return false;
+        //if (buttonPressed)
+        //    return false;
 
         float tileCenter = tileWidth * 0.65f;
         Vector3 dis = transform.position - currentTile.transform.position;
@@ -155,6 +155,9 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (rb.velocity.x > rbThresh)
                 {
+                    //LaunchToward(Level.MapTile(tileX + 1, tileZ));
+                    //return true;
+                    
                     velocityChange(new Vector3(rb.velocity.x, launch, rb.velocity.z));
                     launched = true;
                     return true;
@@ -167,6 +170,8 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (rb.velocity.x < -rbThresh)
                 {
+                    //LaunchToward(Level.MapTile(tileX - 1, tileZ));
+                    //return true;
                     velocityChange(new Vector3(rb.velocity.x, launch, rb.velocity.z));
                     launched = true;
                     return true;
@@ -179,6 +184,8 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (rb.velocity.z > rbThresh)
                 {
+                    //LaunchToward(Level.MapTile(tileX, tileZ + 1));
+                    //return true;
                     velocityChange(new Vector3(rb.velocity.x, launch, rb.velocity.z));
                     launched = true;
                     return true;
@@ -191,6 +198,8 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (rb.velocity.z < -rbThresh)
                 {
+                    //LaunchToward(Level.MapTile(tileX, tileZ - 1));
+                    //return true;
                     velocityChange(new Vector3(rb.velocity.x, launch, rb.velocity.z));
                     launched = true;
                     return true;
@@ -254,7 +263,13 @@ public class PlayerMovement : MonoBehaviour
 
                 rb.velocity = new Vector3(rb.velocity.x * x, 0, rb.velocity.z * z);
 
-                return x == -1 || z == -1;
+                if( x == -1 || z == -1)
+                {
+                    //rb.velocity = new Vector3(rb.velocity.x * x, 0, rb.velocity.z * z);
+                    StartCoroutine(TempPullAnimate(.1f));
+                    return true;
+                }
+                return false;
                 
             }
             else
@@ -263,6 +278,8 @@ public class PlayerMovement : MonoBehaviour
                 t.OnTouchBegin(this);
                 previousTile = currentTile;
                 currentTile = t;
+                if (!buttonPressed)
+                    pullPoint = t.PullPoint.transform.position;
                 Launching = false;
                 if (t.Static)
                     previousEmbankment = t;
@@ -271,6 +288,18 @@ public class PlayerMovement : MonoBehaviour
         }
 
         return false;
+    }
+
+    private IEnumerator TempPullAnimate(float seconds)
+    {
+        float pooptimer = 0;
+        while (pooptimer < seconds)
+        {
+            GrappleObject.PointAt(pullPoint);
+            pooptimer += Time.deltaTime;
+            yield return null;
+        }
+        GrappleObject.Retract();
     }
 
     private void GetTile(Tile t)
@@ -304,13 +333,14 @@ public class PlayerMovement : MonoBehaviour
         dir.Normalize();
         rb.velocity = new Vector3(dir.x, 2, dir.z)*LaunchPower;
         Launching = true;
+        StartCoroutine(TempPullAnimate(.3f));
     }
 
     private bool PlaceTileIntoVoid(Tile t)
     {
         if (buttonPressed)
             return false;
-        if (t == currentTile || !MoreThanAStepDown(t) || !Level.LegalSpot(t))
+        if (t == currentTile || (t.StackSize >= currentTile.StackSize - 1 && t.StackSize != 0) || !Level.LegalSpot(t))
             return false;
 
         if (Inventory.TileIsAddon())
@@ -389,6 +419,8 @@ public class PlayerMovement : MonoBehaviour
     private bool StepUp(Tile t)
     {
         //return t.StackSize > currentTile.StackSize;
+        if (transform.position.y > t.PullPoint.transform.position.y)
+            return false;
         return t.StackSize - currentTile.StackSize == 1;
     }
 }

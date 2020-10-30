@@ -46,7 +46,7 @@ public class Tile : MonoBehaviour
     {
         float h = StackSize * tileHeight;
         //Vector3 pos = new Vector3(Pillar.transform.position.x, h, Pillar.transform.position.z);
-        Floor.transform.localScale = new Vector3(10, h, 10);
+        //Floor.transform.localScale = new Vector3(10, h, 10);
         Floor.transform.position = new Vector3(Floor.transform.position.x, h, Floor.transform.position.z);
 
         Pillar.transform.position = new Vector3(Pillar.transform.position.x, h, Pillar.transform.position.z);
@@ -165,6 +165,8 @@ public class Tile : MonoBehaviour
 
     public IEnumerable<Tile> GetTopLayer()
     {
+        if (Static)
+            return new List<Tile>();
         if (Addons.Count > 0)
         {
             List<Tile> r = Addons;

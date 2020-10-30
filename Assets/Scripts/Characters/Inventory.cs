@@ -72,10 +72,19 @@ public class Inventory : MonoBehaviour
             n += " " + t.Name;
             t.gameObject.SetActive(false);
         }
-        if (addon)
-            dInventory.text = "Addon:" + n;
+        if (tileValue != 0)
+        {
+            if (addon)
+                dInventory.text = "Addon:" + n;
+            else
+                dInventory.text = "Tile:" + n;
+        }
         else
-            dInventory.text = "Tile:" + n;
+        {
+            dInventory.text = "No Item";
+            addon = false;
+            inventorySlot = null;
+        }
     }
 
     public static bool TryGetItem(out IEnumerable<Tile> item)
