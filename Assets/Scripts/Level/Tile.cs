@@ -72,6 +72,7 @@ public class Tile : MonoBehaviour
     }
     public void OnTouchBegin(PlayerMovement player)
     {
+        //print("touch beg in " + x + " " + y);
         if (action != null)
             action.OnTouchBegin(player);
         else
@@ -131,7 +132,7 @@ public class Tile : MonoBehaviour
         if (this.action != null)
             Destroy(this.action.gameObject);
 
-        print("setting action for " + x + " " + y);
+        //print("setting action for " + x + " " + y);
 
         GameObject g = Instantiate(action.gameObject);
         
@@ -142,10 +143,10 @@ public class Tile : MonoBehaviour
     {
         if (action == null)
         {
-            print("no action for " + x + " " + y);
+            //print("no action for " + x + " " + y);
             return false;
         }
-        print("yes action for " + x + " " + y);
+        //print("yes action for " + x + " " + y);
         action.Action(player);
         return true;
     }

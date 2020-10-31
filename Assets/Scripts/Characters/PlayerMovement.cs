@@ -137,17 +137,33 @@ public class PlayerMovement : MonoBehaviour
     {
         if (msg == null)
         {
-            if (currentTile.Static)
-                ActionHUD.text = "Nothing";
+            SetInteractionActionMessage();
+        }
+        else
+            ActionHUD.text = msg;
+
+    }
+
+    private void SetInteractionActionMessage()
+    {
+        if (currentTile.Static)
+        {
+            //print("action = nothing");
+            ActionHUD.text = "Nothing";
+        }
+        else
+        {
+            if (Inventory.IsEmpty())
+            {
+                //print("action = Get Tile");
+                ActionHUD.text = "Get Tile";
+            }
             else
             {
-                if (Inventory.IsEmpty())
-                    ActionHUD.text = "Get Tile";
-                else
-                    ActionHUD.text = "Stack Tile";
+                //print("action = Stack Tile");
+                ActionHUD.text = "Stack Tile";
             }
         }
-
     }
 
 
@@ -295,9 +311,9 @@ public class PlayerMovement : MonoBehaviour
             else
             {
                 currentTile.OnTouchLeft(this);
-                t.OnTouchBegin(this);
                 previousTile = currentTile;
                 currentTile = t;
+                currentTile.OnTouchBegin(this);
                 if (!buttonPressed)
                     pullPoint = t.PullPoint.transform.position;
                 Launching = false;
@@ -327,13 +343,14 @@ public class PlayerMovement : MonoBehaviour
         Inventory.TryAddItem(t.GetTopLayer());
         if (!Solid(t))
             LaunchHomewards();
-        
+        SetInteractionActionMessage();
     }
     private void PlaceTileOnTop(Tile t)
     {
         IEnumerable<Tile> tiles;
         if (Inventory.TryGetItem(out tiles))
             t.Add(tiles);
+        SetInteractionActionMessage();
     }
 
     private void LaunchHomewards()
@@ -371,6 +388,8 @@ public class PlayerMovement : MonoBehaviour
             return false;
 
         t.Add(item);
+
+        SetInteractionActionMessage();
         return true;
     }
 

@@ -150,7 +150,7 @@ public class LevelController : MonoBehaviour
     public void InitNPCPaths()
     {
         foreach (WorkerBFS goal in WorkerGoals)
-            goal.Set(map);
+            goal.Set(map, this);
     }
 
     public void TileChanged(Tile t)

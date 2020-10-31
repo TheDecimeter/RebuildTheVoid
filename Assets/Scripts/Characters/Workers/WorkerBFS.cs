@@ -6,11 +6,14 @@ public class WorkerBFS : MonoBehaviour
 {
     public Vector2Int Goal1, Goal2;
     public int MaxDist;
+    public LevelController Level { get; protected set; }
 
     private int [][] to1, to2;
     
-    public void Set(Tile [][] map)
+    public void Set(Tile [][] map, LevelController level)
     {
+        this.Level = level;
+
         to1 = new int[map.Length][];
         for (int i = 0; i < map.Length; ++i)
             to1[i] = new int[map[0].Length];
@@ -21,16 +24,66 @@ public class WorkerBFS : MonoBehaviour
 
     public void UpdatePaths(Tile [][] map)
     {
-        BFS(to1, Goal1.x, Goal1.y, Goal2.x, Goal2.y, map);
-        BFS(to2, Goal2.x, Goal2.y, Goal1.x, Goal1.y, map);
+        BFS(to1, Goal1.x, Goal1.y, Goal2.x, Goal2.y, map, MaxDist);
+        BFS(to2, Goal2.x, Goal2.y, Goal1.x, Goal1.y, map, MaxDist);
     }
 
-    public void BFS(int[][] m, int fX, int fY, int tX, int tY, Tile[][]map)
+    public void UpdatePathsCoroutine(Tile [][] map)
+    {
+        StopAllCoroutines();
+        //StartCoroutine(BFS(to1, Goal1.x, Goal1.y, Goal2.x, Goal2.y, map, MaxDist));
+        //StartCoroutine(BFS(to2, Goal2.x, Goal2.y, Goal1.x, Goal1.y, map, MaxDist));
+    }
+
+    public int DistTo(Vector2Int goal, int x, int y)
+    {
+        if (goal == Goal1) return to2[x][y];
+        else return to1[x][y];
+    }
+
+    public bool TryGetMove(Vector2Int goal, int fx, int fy, out int gx, out int gy)
+    {
+        if (goal == Goal1) return TryGetMove(to1, fx, fy, out gx, out gy);
+        else return TryGetMove(to2, fx, fy, out gx, out gy);
+    }
+
+    private bool TryGetMove(int[][] m, int fx, int fy, out int gx, out int gy)
+    {
+        gx = 0;gy = 0;
+        int c = m[fx][fy];
+
+        print("getting move " + fx + " " + fy + " c:" + c);
+        printMap(m, 0, 10, 0, 8);
+
+        if (m[fx + 1][fy] == c - 1)
+        {
+            gx = 1;
+            return true;
+        }
+        if (m[fx - 1][fy] == c - 1)
+        {
+            gx = -1;
+            return true;
+        }
+        if (m[fx][fy + 1] == c - 1)
+        {
+            gy = 1;
+            return true;
+        }
+        if (m[fx][fy - 1] == c - 1)
+        {
+            gy = -1;
+            return true;
+        }
+        return false;
+    }
+
+    public static void BFS(int[][] m, int fX, int fY, int tX, int tY, Tile[][]map, int MaxDist)
     {
         resetMap(m);
         Queue<Node> q = new Queue<Node>();
         q.Enqueue(new Node(fX, fY, 1));
-
+        bool noPath = true;
         while (q.Count > 0)
         {
             Node c = q.Dequeue();
@@ -39,12 +92,15 @@ public class WorkerBFS : MonoBehaviour
             if (c.x == tX && c.y == tY)
             {
                 print("Worker BFS made path");
-                return;
+                printMap(m, 0, 10, 0, 8);
+                noPath = false;
+                break;
             }
             if (c.c > MaxDist)
             {
                 print("Worker BFS unable to make path, too far");
-                return;
+                noPath = false;
+                break;
             }
 
 
@@ -57,11 +113,15 @@ public class WorkerBFS : MonoBehaviour
                 q.Enqueue(n);
             if (tryGetNode(m, c, 1, 0, map, out n))
                 q.Enqueue(n);
+
+            //yield return null;
         }
-        print("Worker BFS couldn't make path, none found");
+
+        if(noPath)
+            print("Worker BFS couldn't make path, none found");
     }
 
-    private void resetMap(int [][] m)
+    private static void resetMap(int [][] m)
     {
         int length = m.Length, width = m[0].Length;
         for (int i = 0; i < length; ++i)
@@ -108,5 +168,19 @@ public class WorkerBFS : MonoBehaviour
             this.x = x;
             this.y = y;
         }
+    }
+
+    private static void printMap(int[][] m, int x1, int x2, int y1, int y2)
+    {
+        string s="";
+        for(int i=y1; i<y2; ++i)
+        {
+            for(int j=x1; j<x2; ++j)
+            {
+                s += m[j][i] + " ";
+            }
+            s += "\n";
+        }
+        print("Map from " + x1 + " to " + x2 + " and " + y1 + "to" + y2 + "\n" + s);
     }
 }
