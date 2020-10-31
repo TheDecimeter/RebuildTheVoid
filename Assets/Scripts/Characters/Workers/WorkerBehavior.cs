@@ -31,7 +31,7 @@ public class WorkerBehavior : MonoBehaviour
 
         if (Goals.TryGetMove(currentGoal, x, y, out gx, out gy))
         {
-            Vector3 nextPos = LevelController.PhysicalLocation(x+gx, y+gy);
+            Vector3 nextPos = LevelController.PhysicalLocation(x + gx, y + gy) + GetOffset();
             Vector3 course = transform.position - nextPos;
             course = new Vector3(course.x, 0, course.z);
             heading = course.normalized;
@@ -94,7 +94,7 @@ public class WorkerBehavior : MonoBehaviour
 
     private Vector3 GetOffset()
     {
-        return Vector3.zero;
+        return new Vector3(Random.Range(-4, 4),0, Random.Range(-4, 4));
     }
 
     class Next
