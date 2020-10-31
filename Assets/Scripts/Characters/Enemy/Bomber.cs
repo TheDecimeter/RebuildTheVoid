@@ -7,7 +7,7 @@ public class Bomber : MonoBehaviour
     private Tile Target;
 
     private Vector3 attackVector, approachVector;
-    private float attackPosition = 0, attackSpeed = 1f, attackDistance=10, attackHeight=10, bombSpeed=1;
+    private float attackPosition = 0, attackSpeed = 1f, attackDistance=10, attackHeight=4, bombSpeed=1;
 
     private const int MaxHealth = 10;
     private int health = MaxHealth;
@@ -48,7 +48,7 @@ public class Bomber : MonoBehaviour
         else
         {
             attackPosition -= Time.deltaTime * attackSpeed;
-            transform.position = Target.transform.position + attackVector + approachVector * attackPosition;
+            transform.position = Target.PullPoint.transform.position + attackVector + approachVector * attackPosition;
         }
     }
 

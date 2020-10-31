@@ -124,7 +124,6 @@ public class BomberSpawner : MonoBehaviour
         print("launching bomber at " + target.gameObject.name);
 
         GameObject g = Instantiate(BomberTemplate.gameObject);
-        g.SetActive(true);
         Bomber b = g.GetComponent<Bomber>();
         b.Init(target, this);
         bombers.Add(b);
