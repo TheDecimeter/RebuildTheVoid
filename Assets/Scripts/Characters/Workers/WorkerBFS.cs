@@ -9,6 +9,9 @@ public class WorkerBFS : MonoBehaviour
     public LevelController Level { get; protected set; }
 
     private int [][] to1, to2;
+
+    private Tile[][] map;
+    private bool notMapped = true;
     
     public void Set(Tile [][] map, LevelController level)
     {
@@ -24,25 +27,47 @@ public class WorkerBFS : MonoBehaviour
 
     public void UpdatePaths(Tile [][] map)
     {
-        BFS(to1, Goal1.x, Goal1.y, Goal2.x, Goal2.y, map, MaxDist);
-        BFS(to2, Goal2.x, Goal2.y, Goal1.x, Goal1.y, map, MaxDist);
+        this.map = map;
+        bool a = BFS(to1, Goal1.x, Goal1.y, Goal2.x, Goal2.y, map, MaxDist);
+        bool b = BFS(to2, Goal2.x, Goal2.y, Goal1.x, Goal1.y, map, MaxDist);
+        notMapped = !(a && b);
     }
 
-    public void UpdatePathsCoroutine(Tile [][] map)
-    {
-        StopAllCoroutines();
-        //StartCoroutine(BFS(to1, Goal1.x, Goal1.y, Goal2.x, Goal2.y, map, MaxDist));
-        //StartCoroutine(BFS(to2, Goal2.x, Goal2.y, Goal1.x, Goal1.y, map, MaxDist));
-    }
+    //public void UpdatePathsCoroutine(Tile [][] map)
+    //{
+    //    StopAllCoroutines();
+    //    //StartCoroutine(BFS(to1, Goal1.x, Goal1.y, Goal2.x, Goal2.y, map, MaxDist));
+    //    //StartCoroutine(BFS(to2, Goal2.x, Goal2.y, Goal1.x, Goal1.y, map, MaxDist));
+    //}
 
     public int DistTo(Vector2Int goal, int x, int y)
     {
         if (goal == Goal1) return to2[x][y];
         else return to1[x][y];
     }
+    
+    public bool TryMapToMe(Vector2Int goal, int x, int y)
+    {
+        if (notMapped)
+            return false;
+
+        if (goal == Goal1) return TryMapToMe(to1, goal, x, y);
+        else return TryMapToMe(to2, goal, x, y);
+    }
+
+    private bool TryMapToMe(int[][] m, Vector2Int to, int x, int y)
+    {
+        BFS(m, to.x, to.y, x, y, map, MaxDist);
+        return m[x][y] != 0;
+    }
 
     public bool TryGetMove(Vector2Int goal, int fx, int fy, out int gx, out int gy)
     {
+        if (notMapped)
+        {
+            gx = 0;  gy = 0;
+            return false;
+        }
         if (goal == Goal1) return TryGetMove(to1, fx, fy, out gx, out gy);
         else return TryGetMove(to2, fx, fy, out gx, out gy);
     }
@@ -51,9 +76,11 @@ public class WorkerBFS : MonoBehaviour
     {
         gx = 0;gy = 0;
         int c = m[fx][fy];
+        if (c == 0)
+            return false;
 
-        print("getting move " + fx + " " + fy + " c:" + c);
-        printMap(m, 0, 10, 0, 8);
+        //print("getting move " + fx + " " + fy + " c:" + c);
+        //printMap(m, 0, 10, 0, 8);
 
         if (m[fx + 1][fy] == c - 1)
         {
@@ -78,12 +105,11 @@ public class WorkerBFS : MonoBehaviour
         return false;
     }
 
-    public static void BFS(int[][] m, int fX, int fY, int tX, int tY, Tile[][]map, int MaxDist)
+    public static bool BFS(int[][] m, int fX, int fY, int tX, int tY, Tile[][]map, int MaxDist)
     {
         resetMap(m);
         Queue<Node> q = new Queue<Node>();
         q.Enqueue(new Node(fX, fY, 1));
-        bool noPath = true;
         while (q.Count > 0)
         {
             Node c = q.Dequeue();
@@ -91,16 +117,14 @@ public class WorkerBFS : MonoBehaviour
             m[c.x][c.y] = c.c;
             if (c.x == tX && c.y == tY)
             {
-                print("Worker BFS made path");
-                printMap(m, 0, 10, 0, 8);
-                noPath = false;
-                break;
+                //print("Worker BFS made path");
+                //printMap(m, 0, 10, 0, 8);
+                return true;
             }
             if (c.c > MaxDist)
             {
-                print("Worker BFS unable to make path, too far");
-                noPath = false;
-                break;
+                //print("Worker BFS unable to make path, too far");
+                return false;
             }
 
 
@@ -113,12 +137,10 @@ public class WorkerBFS : MonoBehaviour
                 q.Enqueue(n);
             if (tryGetNode(m, c, 1, 0, map, out n))
                 q.Enqueue(n);
-
-            //yield return null;
         }
 
-        if(noPath)
-            print("Worker BFS couldn't make path, none found");
+        //print("Worker BFS couldn't make path, none found");
+        return false;
     }
 
     private static void resetMap(int [][] m)

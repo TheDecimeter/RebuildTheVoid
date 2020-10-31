@@ -9,7 +9,7 @@ public class WorkerBehavior : MonoBehaviour
     private Vector2Int currentGoal;
     Next next;
     private Vector3 heading, startPos;
-    private float timer = 0, unitsPerSec = 10, distance=0;
+    private float timer = 0, unitsPerSec = 10, totalDistance=0;
     private bool reachedFarGoal;
 
     private void Start()
@@ -27,24 +27,28 @@ public class WorkerBehavior : MonoBehaviour
     {
         int x, y, gx, gy;
         LevelController.MapLocation(gameObject, out x, out y);
-        ReachedGoal(x, y);
+        CheckIfReachedGoal(x, y);
 
         if (Goals.TryGetMove(currentGoal, x, y, out gx, out gy))
         {
-            Vector3 nextPos = LevelController.PhysicalLocation(x + gx, y + gy) + GetOffset();
-            Vector3 course = transform.position - nextPos;
-            course = new Vector3(course.x, 0, course.z);
+            //Vector3 nextPos = LevelController.PhysicalLocation(x + gx, y + gy) + GetOffset();
+            Vector3 nextPos = Goals.Level.MapTile(x + gx, y + gy).PullPoint.transform.position + GetOffset();
+            Vector3 course = nextPos-transform.position;
+            //course = new Vector3(course.x, 0, course.z);
             heading = course.normalized;
             timer = 0;
             startPos = transform.position;
-            distance = course.magnitude;
-            print("on " + x + " " + y + " plotted next move to " + (x+gx) + " " + (y+gy));
+            totalDistance = course.magnitude;
+            //print("on " + x + " " + y + " plotted next move to " + (x+gx) + " " + (y+gy));
         }
         else
-            print("failed to get move");
+        {
+            //print("failed to get map, trying remapping");
+            Goals.TryMapToMe(currentGoal, x, y);
+        }
     }
 
-    private bool ReachedGoal(int x, int y)
+    private bool CheckIfReachedGoal(int x, int y)
     {
         if (x == currentGoal.x && y == currentGoal.y)
         {
@@ -55,14 +59,14 @@ public class WorkerBehavior : MonoBehaviour
                     Reward();
                     currentGoal = Goals.Goal1;
 
-                    print("reached goal reward");
+                    //print("reached goal reward");
                 }
             }
             else
             {
                 reachedFarGoal = true;
                 currentGoal = Goals.Goal2;
-                print("reached half goal");
+                //print("reached half goal");
             }
             return true;
         }
@@ -71,7 +75,7 @@ public class WorkerBehavior : MonoBehaviour
 
     private void Reward()
     {
-        print("NPC reached goal");
+        //print("NPC reached goal");
         reachedFarGoal = false;
         Inventory.AddMoney(1);
     }
@@ -79,22 +83,22 @@ public class WorkerBehavior : MonoBehaviour
     private void UpdateStep()
     {
         timer += Time.deltaTime;
-        float traveled = timer * unitsPerSec;
+        float distanceTraveled = timer * unitsPerSec;
 
-        if (traveled >= distance)
+        if (distanceTraveled >= totalDistance)
         {
             SetNextStep();
         }
         else
         {
-            transform.position = startPos - traveled * heading;
+            transform.position = startPos + heading * distanceTraveled;
         }
 
     }
 
     private Vector3 GetOffset()
     {
-        return new Vector3(Random.Range(-4, 4),0, Random.Range(-4, 4));
+        return new Vector3(Random.Range(-4, 4), 1, Random.Range(-4, 4));
     }
 
     class Next
