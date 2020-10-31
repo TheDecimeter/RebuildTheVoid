@@ -14,6 +14,8 @@ public class LevelController : MonoBehaviour
 
     public WorkerBFS[] WorkerGoals;
 
+    public BomberSpawner[] bombers;
+
     private static float tileSizeStat;
     private static Tile nullTile;
     private static int length, width;
@@ -22,11 +24,11 @@ public class LevelController : MonoBehaviour
 
     private static float ox, oy;
 
-    private delegate void UpdateMap();
+    private delegate void UpdateMap(Tile t);
     UpdateMap runBFS;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         ox = transform.position.x;
         oy = transform.position.z;
@@ -140,21 +142,25 @@ public class LevelController : MonoBehaviour
         return map[x][y];
     }
 
-    public void V() {}
+    public void V(Tile t) {}
 
-    public void SetNPCPaths()
+    public void SetNPCPaths(Tile t)
     {
         foreach (WorkerBFS goal in WorkerGoals)
-            goal.UpdatePaths(map);
+            goal.UpdatePaths(map, t.x, t.y);
+        foreach (BomberSpawner b in bombers)
+            b.UpdateTile(t.x, t.y);
     }
     public void InitNPCPaths()
     {
         foreach (WorkerBFS goal in WorkerGoals)
             goal.Set(map, this);
+        foreach (BomberSpawner b in bombers)
+            b.Init(map, this);
     }
 
     public void TileChanged(Tile t)
     {
-        runBFS();
+        runBFS(t);
     }
 }

@@ -23,14 +23,34 @@ public class WorkerBFS : MonoBehaviour
         to2 = new int[map.Length][];
         for (int i = 0; i < map.Length; ++i)
             to2[i] = new int[map[0].Length];
+
+        ForceUpdatePaths(map);
     }
 
-    public void UpdatePaths(Tile [][] map)
+    public void UpdatePaths(Tile[][] map, int atX, int atY)
+    {
+        if(isRelevant(atX,atY))
+            ForceUpdatePaths(map);
+    }
+
+    private void ForceUpdatePaths(Tile [][] map)
     {
         this.map = map;
         bool a = BFS(to1, Goal1.x, Goal1.y, Goal2.x, Goal2.y, map, MaxDist);
         bool b = BFS(to2, Goal2.x, Goal2.y, Goal1.x, Goal1.y, map, MaxDist);
         notMapped = !(a && b);
+    }
+
+    private bool isRelevant(int x, int y)
+    {
+        return isRelevant(to1, x, y) || isRelevant(to2, x, y);
+    }
+    private bool isRelevant(int[][] m, int x, int y)
+    {
+        return m[x + 1][y] != 0 ||
+               m[x - 1][y] != 0 ||
+               m[x][y + 1] != 0 ||
+               m[x][y - 1] != 0;
     }
 
     //public void UpdatePathsCoroutine(Tile [][] map)

@@ -18,6 +18,12 @@ public class Tile : MonoBehaviour
 
     private TileAction action;
 
+    private const int MaxHealth = 10;
+    private int health = MaxHealth;
+
+    private HashSet<Character> Touching = new HashSet<Character>();
+    private PlayerMovement TouchingPlayer;
+
     private int _s = 0;
     public int StackSize {
         get
@@ -46,6 +52,23 @@ public class Tile : MonoBehaviour
         this.y = y;
     }
 
+    public void AddCharacter(Character character)
+    {
+        Touching.Add(character);
+    }
+    public void RemoveCharacter(Character character)
+    {
+        Touching.Remove(character);
+    }
+    public void AddPlayer(PlayerMovement character)
+    {
+        TouchingPlayer = character;
+    }
+    public void RemovePlayer()
+    {
+        TouchingPlayer = null;
+    }
+
     public void UpdateHeight()
     {
         float h = StackSize * tileHeight;
@@ -67,11 +90,15 @@ public class Tile : MonoBehaviour
     }
     public void OnTouchLeft(PlayerMovement player)
     {
+        RemovePlayer();
+        RemoveCharacter(player);
         if (action != null)
             action.OnTouchLeft(player);
     }
     public void OnTouchBegin(PlayerMovement player)
     {
+        RemoveCharacter(player);
+        AddPlayer(player);
         //print("touch beg in " + x + " " + y);
         if (action != null)
             action.OnTouchBegin(player);

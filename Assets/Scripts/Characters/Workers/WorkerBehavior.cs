@@ -2,20 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WorkerBehavior : MonoBehaviour
+public class WorkerBehavior : Character
 {
     public WorkerBFS Goals;
+    public Vector2Int StartMapPos;
 
     private Vector2Int currentGoal;
     Next next;
     private Vector3 heading, startPos;
     private float timer = 0, unitsPerSec = 10, totalDistance=0;
     private bool reachedFarGoal;
+    private Tile CurrentTile;
 
     private void Start()
     {
+        transform.position = LevelController.PhysicalLocation(StartMapPos.x, StartMapPos.y);
         reachedFarGoal = false;
         currentGoal = Goals.Goal1;
+
+        CurrentTile= Goals.Level.MapTile(gameObject);
+        CurrentTile.AddCharacter(this);
     }
     // Update is called once per frame
     void Update()
@@ -92,8 +98,20 @@ public class WorkerBehavior : MonoBehaviour
         else
         {
             transform.position = startPos + heading * distanceTraveled;
+            UpdateTile();
         }
 
+    }
+
+    private void UpdateTile()
+    {
+        Tile t = Goals.Level.MapTile(gameObject);
+        if (t != CurrentTile)
+        {
+            CurrentTile.RemoveCharacter(this);
+            CurrentTile = t;
+            CurrentTile.AddCharacter(this);
+        }
     }
 
     private Vector3 GetOffset()
