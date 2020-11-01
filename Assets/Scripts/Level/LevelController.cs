@@ -74,17 +74,17 @@ public class LevelController : MonoBehaviour
         LevelController.width = width;
     }
 
-    private void AddStartTiles(IEnumerable<TileGroup.TileConfig> tiles)
+    private void AddStartTiles(IEnumerable<TileHolder.TileConfig> tiles)
     {
-        foreach (TileGroup.TileConfig tile in tiles)
+        foreach (TileHolder.TileConfig tile in tiles)
         {
-            if (!inBounds(tile.x, tile.y))
+            if (!inBounds(tile.pos.x, tile.pos.y))
             {
-                Debug.LogWarning("not placing tile at " + tile.x + " " + tile.y);
+                Debug.LogWarning("not placing tile at " + tile.pos.x + " " + tile.pos.y);
                 continue;
             }
-            map[tile.x][tile.y].Add(Inventory.Multi(Inventory.CloneTile(tile.TileTemplate, true)));
-            map[tile.x][tile.y].AddAction(tile.Action);
+            map[tile.pos.x][tile.pos.y].Add(Inventory.Multi(Inventory.CloneTile(tile.TileTemplate, true)));
+            map[tile.pos.x][tile.pos.y].AddAction(tile.Action);
         }
     }
 

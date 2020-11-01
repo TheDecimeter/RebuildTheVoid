@@ -2,27 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileGroup : MonoBehaviour
+public class TileGroup : TileHolder
 {
-    [System.Serializable]
-    public class TileConfig : System.Object
-    {
-        public int x;
-        public int y;
-        public Tile TileTemplate;
-        public TileAction Action;
 
-        public void X(int x)
-        {
-            this.x = x;
-        }
-        public void Y(int y)
-        {
-            this.y = y;
-        }
+
+    public Vector2Int max;
+
+    [SerializeField]
+    private TileConfig [] Tiles;
+
+    public override Vector2Int Max()
+    {
+        return max;
     }
 
-    public int maxX;
-    public int maxY;
-    public TileConfig [] Tiles;
+    public override void Max(Vector2Int max)
+    {
+        this.max = max;
+    }
+
+    public override IEnumerable<TileConfig> Read()
+    {
+        foreach (TileConfig t in Tiles)
+            yield return t;
+    }
 }

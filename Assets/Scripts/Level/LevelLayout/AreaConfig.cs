@@ -12,31 +12,43 @@ public class AreaConfig : MonoBehaviour
         public int OffsetX;
         public int OffsetY;
         public ReadOrder[] ReadOrder;
-        public TileGroup Group;
+        public TileHolder [] Groups;
     }
 
     [SerializeField]
     private Area area;
 
-    private delegate void manipulation(List<TileGroup.TileConfig> l, Area a, TileGroup g);
+    private delegate void manipulation(List<TileHolder.TileConfig> l, Area a, TileHolder g);
 
     /// <summary>
     /// Read the areas out with correct x and y
     /// </summary>
     /// <returns></returns>
-    public IEnumerable<TileGroup.TileConfig> Read()
+    public IEnumerable<TileHolder.TileConfig> Read()
     {
-        List<TileGroup.TileConfig> l = new List<TileGroup.TileConfig>();
-        foreach (TileGroup.TileConfig t in area.Group.Tiles)
-            l.Add(t);
+        List<TileHolder.TileConfig> l = new List<TileHolder.TileConfig>();
+        foreach (TileHolder group in area.Groups)
+        {
+            foreach (TileHolder.TileConfig t in group.Read())
+                l.Add(New(t));
 
-        foreach (ReadOrder ro in area.ReadOrder)
-            GetManipulation(ro)(l, area, area.Group);
+            foreach (ReadOrder ro in area.ReadOrder)
+                GetManipulation(ro)(l, area, group);
 
-        ApplyOffset(l, area);
-
+            ApplyOffset(l, area);
+        }
 
         return l;
+    }
+
+    private TileHolder.TileConfig New(TileHolder.TileConfig t)
+    {
+        TileHolder.TileConfig r = new TileHolder.TileConfig();
+        r.pos.x = t.pos.x;
+        r.pos.y = t.pos.y;
+        r.TileTemplate = t.TileTemplate;
+        r.Action = t.Action;
+        return r;
     }
 
     private manipulation GetManipulation(ReadOrder order)
@@ -60,62 +72,60 @@ public class AreaConfig : MonoBehaviour
         }
     }
 
-    private void Error(List<TileGroup.TileConfig> l, Area a, TileGroup g)
+    private void Error(List<TileHolder.TileConfig> l, Area a, TileHolder g)
     {
         Debug.LogError("trying to use an area manipulation which isn't written");
     }
-    private void FlipXY(List<TileGroup.TileConfig> l, Area a, TileGroup g)
+    private void FlipXY(List<TileHolder.TileConfig> l, Area a, TileHolder g)
     {
-        int tmp = g.maxX;
-        g.maxX = g.maxY;
-        g.maxY = g.maxX;
+        int tmp = g.Max().x;
+        Vector2Int flipmax = new Vector2Int(g.Max().y, g.Max().y);
+        g.Max(flipmax);
 
-        foreach (TileGroup.TileConfig t in l)
+        foreach (TileHolder.TileConfig t in l)
         {
-            tmp = t.x;
-            t.X(t.y);
+            tmp = t.pos.x;
+            t.X(t.pos.y);
             t.Y(tmp);
         }
     }
-    private void ReverseX(List<TileGroup.TileConfig> l, Area a, TileGroup g)
+    private void ReverseX(List<TileHolder.TileConfig> l, Area a, TileHolder g)
     {
-        foreach (TileGroup.TileConfig t in l)
+        foreach (TileHolder.TileConfig t in l)
         {
-            t.X(g.maxX-t.x);
+            t.X(g.Max().x-t.pos.x);
         }
     }
-    private void ReverseY(List<TileGroup.TileConfig> l, Area a, TileGroup g)
+    private void ReverseY(List<TileHolder.TileConfig> l, Area a, TileHolder g)
     {
-        foreach (TileGroup.TileConfig t in l)
+        foreach (TileHolder.TileConfig t in l)
         {
-            t.Y(g.maxY - t.y);
+            t.Y(g.Max().y - t.pos.y);
         }
     }
-    private void Rotate90(List<TileGroup.TileConfig> l, Area a, TileGroup g)
+    private void Rotate90(List<TileHolder.TileConfig> l, Area a, TileHolder g)
     {
         ReverseX(l, a, g);
         FlipXY(l, a, g);
     }
-    private void Rotate270(List<TileGroup.TileConfig> l, Area a, TileGroup g)
+    private void Rotate270(List<TileHolder.TileConfig> l, Area a, TileHolder g)
     {
         FlipXY(l, a, g);
         ReverseX(l, a, g);
     }
-    private void Rotate180(List<TileGroup.TileConfig> l, Area a, TileGroup g)
+    private void Rotate180(List<TileHolder.TileConfig> l, Area a, TileHolder g)
     {
         ReverseX(l, a, g);
         ReverseY(l, a, g);
     }
-    private void ApplyOffset(List<TileGroup.TileConfig> l, Area a)
+    private void ApplyOffset(List<TileHolder.TileConfig> l, Area a)
     {
-        foreach (TileGroup.TileConfig t in l)
+        foreach (TileHolder.TileConfig t in l)
         {
-            t.Y(t.y + a.OffsetY);
-            t.X(t.x + a.OffsetY);
+            //int preX = t.pos.x;
+            t.Y(t.pos.y + a.OffsetY);
+            t.X(t.pos.x + a.OffsetX);
+            //print("reading for " + gameObject.name + " " + preX + "+" + area.OffsetX + "=" + t.pos.x);
         }
-
-
-        foreach (TileGroup.TileConfig t in l)
-            print("loc check " + t.y + " " + t.x);
     }
 }

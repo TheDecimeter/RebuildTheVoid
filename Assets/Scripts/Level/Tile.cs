@@ -241,7 +241,8 @@ public class Tile : MonoBehaviour
         if (TouchingPlayer != null)
             TouchingPlayer.Kill();
         foreach (Character c in Touching)
-            Destroy(c.gameObject);
+            if(c!=null)
+                Destroy(c.gameObject);
     }
 
     ~Tile()
