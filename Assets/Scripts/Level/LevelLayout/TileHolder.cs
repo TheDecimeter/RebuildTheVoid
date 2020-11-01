@@ -7,6 +7,13 @@ public abstract class TileHolder : MonoBehaviour
     [System.Serializable]
     public class TileConfig : System.Object
     {
+        public TileConfig() { }
+        public TileConfig(TileConfig t)
+        {
+            pos = new Vector2Int(t.pos.x, t.pos.y);
+            TileTemplate = t.TileTemplate;
+            Action = t.Action;
+        }
         public Vector2Int pos;
         public Tile TileTemplate;
         public TileAction Action;

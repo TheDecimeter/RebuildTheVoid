@@ -436,6 +436,7 @@ MonoBehaviour:
     ReadOrder: 
     Groups:
     - {fileID: 1610586777}
+    - {fileID: 2139344970}
 --- !u!1 &271088111
 GameObject:
   m_ObjectHideFlags: 0
@@ -2107,9 +2108,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   area:
-    OffsetX: 3
-    OffsetY: 1
-    ReadOrder: 
+    OffsetX: 8
+    OffsetY: 8
+    ReadOrder: 01000000
     Groups:
     - {fileID: 1610586777}
     - {fileID: 2139344970}
@@ -2917,7 +2918,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 185d0b8480ada0b4d8348d587381992a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  max: {x: 0, y: 4}
+  max: {x: 1, y: 4}
   Tiles:
   - pos: {x: 0, y: 0}
     TileTemplate: {fileID: 4117277779626024780, guid: 895801b132edd8747937283950534a70,
@@ -2932,6 +2933,10 @@ MonoBehaviour:
       type: 3}
     Action: {fileID: 0}
   - pos: {x: 0, y: 3}
+    TileTemplate: {fileID: 4117277779626024780, guid: 895801b132edd8747937283950534a70,
+      type: 3}
+    Action: {fileID: 0}
+  - pos: {x: 1, y: 4}
     TileTemplate: {fileID: 4117277779626024780, guid: 895801b132edd8747937283950534a70,
       type: 3}
     Action: {fileID: 0}
@@ -3649,7 +3654,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 185d0b8480ada0b4d8348d587381992a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  max: {x: 0, y: 4}
+  max: {x: 1, y: 4}
   Tiles:
   - pos: {x: 0, y: 0}
     TileTemplate: {fileID: 4117277779626024780, guid: 6a28106950f56d24590cb330215bf256,
@@ -3668,6 +3673,10 @@ MonoBehaviour:
       type: 3}
     Action: {fileID: 0}
   - pos: {x: 0, y: 4}
+    TileTemplate: {fileID: 4117277779626024780, guid: 6a28106950f56d24590cb330215bf256,
+      type: 3}
+    Action: {fileID: 0}
+  - pos: {x: 1, y: 4}
     TileTemplate: {fileID: 4117277779626024780, guid: 6a28106950f56d24590cb330215bf256,
       type: 3}
     Action: {fileID: 0}

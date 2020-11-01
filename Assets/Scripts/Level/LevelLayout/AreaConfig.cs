@@ -45,8 +45,7 @@ public class AreaConfig : MonoBehaviour
     private TileHolder.TileConfig New(TileHolder.TileConfig t)
     {
         TileHolder.TileConfig r = new TileHolder.TileConfig();
-        r.pos.x = t.pos.x;
-        r.pos.y = t.pos.y;
+        r.pos = new Vector2Int(t.pos.x, t.pos.y);
         r.TileTemplate = t.TileTemplate;
         r.Action = t.Action;
         return r;
