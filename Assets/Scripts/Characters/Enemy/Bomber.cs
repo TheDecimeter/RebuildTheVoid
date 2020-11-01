@@ -5,11 +5,14 @@ using UnityEngine;
 public class Bomber : MonoBehaviour
 {
     public Grapple weapon;
+    public float attackSpeed = 20f, bombSpeed = 1, cooldown = 2f;
+    public int damage = 3;
+
 
     private Tile Target;
 
     private Vector3 attackVector, approachVector, referenceVector;
-    private float attackPosition = 0, attackSpeed = 10f, attackDistance=10, attackHeight=4, bombSpeed=1;
+    private float attackDistance = 50, attackHeight = 4, attackPosition = 0;
 
     private const int MaxHealth = 10;
     private int health = MaxHealth;
@@ -65,14 +68,14 @@ public class Bomber : MonoBehaviour
         attacking = true;
         while(attacking)
         {
-            yield return new WaitForSeconds(attackSpeed);
+            yield return new WaitForSeconds(cooldown);
             Attack();
         }
     }
 
     private void Attack()
     {
-        print("Bomber: attack");
+        //print("Bomber: attack");
         StartCoroutine(TempPullAnimate(.3f));
     }
 
@@ -91,7 +94,7 @@ public class Bomber : MonoBehaviour
 
         weapon.Retract();
 
-        if (Target.TryKill(5))
+        if (Target.TryKill(damage))
         {
             attacking = false;
             StartCoroutine(Leave());
@@ -117,6 +120,17 @@ public class Bomber : MonoBehaviour
             }
             yield return null;
         }
+    }
+
+    public bool TryKill(int damage)
+    {
+        health -= damage;
+        if(health<=0)
+        {
+            spawner.RemoveBomber(this);
+            return true;
+        }
+        return false;
     }
 
     private Vector3 Offset()

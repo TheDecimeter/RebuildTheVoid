@@ -78,7 +78,7 @@ public class LevelController : MonoBehaviour
     {
         foreach (LevelConfig.TileConfig tile in tiles)
         {
-            map[tile.x][tile.y].Add(Inventory.Multi(Inventory.CloneTile(tile.TileTemplate)));
+            map[tile.x][tile.y].Add(Inventory.Multi(Inventory.CloneTile(tile.TileTemplate, true)));
             map[tile.x][tile.y].AddAction(tile.Action);
         }
     }
@@ -98,11 +98,11 @@ public class LevelController : MonoBehaviour
     {
         for (int i = 1; i <= width; ++i)
         {
-            map[1][i].Add(Inventory.Multi(Inventory.CloneTile(Embankment)));
+            map[1][i].Add(Inventory.Multi(Inventory.CloneTile(Embankment, true)));
         }
         for (int i = 1; i <= width; ++i)
         {
-            map[length][i].Add(Inventory.Multi(Inventory.CloneTile(Embankment)));
+            map[length][i].Add(Inventory.Multi(Inventory.CloneTile(Embankment, true)));
         }
     }
 

@@ -59,7 +59,8 @@ public class BomberSpawner : MonoBehaviour
     public void RemoveBomber(Bomber bomber)
     {
         bombers.Remove(bomber);
-        Destroy(bomber.gameObject);
+        if(bomber!=null)
+            Destroy(bomber.gameObject);
     }
 
     private void setBounds()
@@ -73,7 +74,7 @@ public class BomberSpawner : MonoBehaviour
 
     private void getTiles()
     {
-        print("Get tiles " + minX + " " + maxX + "   " + minY + " " + maxY);
+        //print("Get tiles " + minX + " " + maxX + "   " + minY + " " + maxY);
         Tiles = new List<Tile>();
 
         for(int i=minX; i<=maxX; ++i)
@@ -85,7 +86,7 @@ public class BomberSpawner : MonoBehaviour
             }
         }
 
-        print("got tiles " + Tiles.Count);
+        //print("got tiles " + Tiles.Count);
     }
 
     private bool ValidTile(Tile t)
@@ -122,7 +123,7 @@ public class BomberSpawner : MonoBehaviour
     private void LaunchBomber()
     {
         Tile target = Tiles[Random.Range(0,Tiles.Count-1)];
-        print("launching bomber at " + target.gameObject.name);
+        //print("launching bomber at " + target.gameObject.name);
 
         GameObject g = Instantiate(BomberTemplate.gameObject);
         Bomber b = g.GetComponent<Bomber>();

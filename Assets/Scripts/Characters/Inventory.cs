@@ -151,9 +151,10 @@ public class Inventory : MonoBehaviour
     {
         yield return tile;
     }
-    public static Tile CloneTile(Tile tile)
+    public static Tile CloneTile(Tile tile, bool active=false)
     {
         GameObject g = Instantiate(tile.gameObject);
+        g.SetActive(active);
         return g.GetComponent<Tile>();
     }
 
