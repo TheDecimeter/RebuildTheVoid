@@ -33,8 +33,6 @@ public class LevelController : MonoBehaviour
         ox = transform.position.x;
         oy = transform.position.z;
         tileSizeStat = tileSize;
-        //GenerateLevel(7, 5);
-        //AddEmbankement();
 
         runBFS = V;
 
@@ -109,26 +107,6 @@ public class LevelController : MonoBehaviour
             return false;
         return !t.Static;
     }
-
-    private void AddEmbankement()
-    {
-        for (int i = 1; i <= width; ++i)
-        {
-            map[1][i].Add(Inventory.Multi(Inventory.CloneTile(Embankment, true)));
-        }
-        for (int i = 1; i <= width; ++i)
-        {
-            map[length][i].Add(Inventory.Multi(Inventory.CloneTile(Embankment, true)));
-        }
-    }
-
-    //private void UpdateTile(Tile tile, int x, int y)
-    //{
-    //    if (!(x >= 0 && x < length && y >= 0 && y < width))
-    //        return;
-
-    //    print("Level Controller add tile " + x + " " + y);
-    //}
 
     public static Vector3 PhysicalLocation(int x, int y)
     {

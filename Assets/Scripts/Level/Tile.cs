@@ -113,6 +113,8 @@ public class Tile : MonoBehaviour
         if (Static)
             return;
 
+        health = MaxHealth;
+
         foreach (Tile t in tiles)
         {
             if (t.Addon)
@@ -190,7 +192,7 @@ public class Tile : MonoBehaviour
         }
 
 
-        print("getting top of tile ss:" + StackSize + " T.c" + Tiles.Count);
+        //print("getting top of tile ss:" + StackSize + " T.c" + Tiles.Count);
         Tile t = Tiles.Pop();
         StackSize--;
 

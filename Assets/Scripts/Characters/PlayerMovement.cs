@@ -15,8 +15,10 @@ public class PlayerMovement : Character
 
     public TextMeshProUGUI ActionHUD;
 
+    public static bool stopInput = false;
 
-    private bool buttonPressed = false, actionPerformed = false, Launching = false, launched = false;
+
+    private bool buttonPressed = false, actionPerformed = false, Launching = false, launched = false, dead=false;
     private Vector3 pillar, pullPoint;
 
     private float tileWidth = 4.5f;
@@ -35,6 +37,7 @@ public class PlayerMovement : Character
     // Start is called before the first frame update
     void Start()
     {
+        stopInput = false;
         rb = GetComponent<Rigidbody>();
         currentTile = Level.MapTile(gameObject);
     }
@@ -46,13 +49,38 @@ public class PlayerMovement : Character
         t.OnTouchUpdate(this);
         ThrustCheck();
         ActionCheck(t);
-        if (!PlaceTileIntoVoid(t))
-            if (!BounceCheck(t))
-                JumpCheck(t);
+        PlaceTileIntoVoid(t);
+        if (!BounceCheck(t))
+            JumpCheck(t);
+
+        FallenCheck();
+    }
+
+    private void FallenCheck()
+    {
+        if (dead)
+            return;
+        if (transform.position.y < -5)
+        {
+            if (Solid(currentTile))
+                Warp(5, currentTile.PullPoint.transform.position);
+            else if (Solid(previousTile))
+                Warp(5, previousTile.PullPoint.transform.position);
+            else
+                Warp(5, previousEmbankment.PullPoint.transform.position);
+        }
+    }
+
+    private void Warp(float height, Vector3 loc)
+    {
+        transform.position = new Vector3(loc.x, loc.y + height, loc.z);
     }
 
     private void ThrustCheck()
     {
+        if (stopInput)
+            return;
+
         if (Input.anyKey)
         {
             if (!buttonPressed)
@@ -114,7 +142,7 @@ public class PlayerMovement : Character
                     deltaAngleAction += angle;
                     if (deltaAngleAction > 360)
                     {
-                        print("player performed action");
+                        //print("player performed action");
                         actionPerformed = true;
                         if(!t.Action(this)){
                             if (Inventory.IsEmpty())
@@ -466,6 +494,7 @@ public class PlayerMovement : Character
 
     public void Kill()
     {
+        dead = true;
         DeathMessage.SetActive(true);
     }
 }
