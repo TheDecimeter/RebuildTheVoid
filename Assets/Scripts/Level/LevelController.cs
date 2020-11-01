@@ -39,7 +39,7 @@ public class LevelController : MonoBehaviour
         runBFS = V;
 
         GenerateLevel(CurrentLevel.Length, CurrentLevel.Width);
-        AddStartTiles(CurrentLevel.Tiles);
+        AddStartTiles(CurrentLevel.Read());
 
         InitNPCPaths();
         runBFS = SetNPCPaths;
@@ -74,13 +74,27 @@ public class LevelController : MonoBehaviour
         LevelController.width = width;
     }
 
-    private void AddStartTiles(LevelConfig.TileConfig[] tiles)
+    private void AddStartTiles(IEnumerable<TileGroup.TileConfig> tiles)
     {
-        foreach (LevelConfig.TileConfig tile in tiles)
+        foreach (TileGroup.TileConfig tile in tiles)
         {
+            if (!inBounds(tile.x, tile.y))
+            {
+                Debug.LogWarning("not placing tile at " + tile.x + " " + tile.y);
+                continue;
+            }
             map[tile.x][tile.y].Add(Inventory.Multi(Inventory.CloneTile(tile.TileTemplate, true)));
             map[tile.x][tile.y].AddAction(tile.Action);
         }
+    }
+
+    private bool inBounds(int x, int y)
+    {
+        if (x <= 0 || x >= length + 1)
+            return false;
+        if (y <= 0 || y >= width + 1)
+            return false;
+        return true;
     }
 
     public bool LegalSpot(Tile t)
