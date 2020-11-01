@@ -26,9 +26,9 @@ public class AreaConfig : MonoBehaviour
     /// <returns></returns>
     public IEnumerable<TileHolder.TileConfig> Read()
     {
-        List<TileHolder.TileConfig> l = new List<TileHolder.TileConfig>();
         foreach (TileHolder group in area.Groups)
         {
+            List<TileHolder.TileConfig> l = new List<TileHolder.TileConfig>();
             foreach (TileHolder.TileConfig t in group.Read())
                 l.Add(New(t));
 
@@ -36,9 +36,10 @@ public class AreaConfig : MonoBehaviour
                 GetManipulation(ro)(l, area, group);
 
             ApplyOffset(l, area);
-        }
 
-        return l;
+            foreach (TileHolder.TileConfig t in l)
+                yield return t;
+        }
     }
 
     private TileHolder.TileConfig New(TileHolder.TileConfig t)
