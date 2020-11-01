@@ -10,10 +10,11 @@ public class LevelConfig : MonoBehaviour
     [SerializeField]
     private AreaConfig[] Areas;
 
-    public IEnumerable<TileGroup.TileConfig> Read()
+    public IEnumerable<TileHolder.TileConfig> Read()
     {
         foreach (AreaConfig a in Areas)
-            foreach (TileGroup.TileConfig t in a.Read())
+            if(a!=null)
+            foreach (TileHolder.TileConfig t in a.Read())
                 yield return t;
     }
 }

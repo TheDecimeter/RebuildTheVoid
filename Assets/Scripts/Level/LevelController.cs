@@ -41,8 +41,9 @@ public class LevelController : MonoBehaviour
         GenerateLevel(CurrentLevel.Length, CurrentLevel.Width);
         AddStartTiles(CurrentLevel.Read());
 
-        InitNPCPaths();
-        runBFS = SetNPCPaths;
+        CleanControllers();
+        InitControllers();
+        runBFS = UpdateControllers;
 
         nullTile = Instantiate(TileTemplate);
         nullTile.name = "nullTile";
@@ -83,7 +84,8 @@ public class LevelController : MonoBehaviour
                 Debug.LogWarning("not placing tile at " + tile.pos.x + " " + tile.pos.y);
                 continue;
             }
-            map[tile.pos.x][tile.pos.y].Add(Inventory.Multi(Inventory.CloneTile(tile.TileTemplate, true)));
+            if(tile.TileTemplate!=null)
+                map[tile.pos.x][tile.pos.y].Add(Inventory.Multi(Inventory.CloneTile(tile.TileTemplate, true)));
             map[tile.pos.x][tile.pos.y].AddAction(tile.Action);
         }
     }
@@ -158,19 +160,40 @@ public class LevelController : MonoBehaviour
 
     public void V(Tile t) {}
 
-    public void SetNPCPaths(Tile t)
+    public void UpdateControllers(Tile t)
     {
         foreach (WorkerBFS goal in WorkerGoals)
             goal.UpdatePaths(map, t.x, t.y);
         foreach (BomberSpawner b in bombers)
             b.UpdateTile(t.x, t.y);
     }
-    public void InitNPCPaths()
+
+    public void CleanControllers()
+    {
+        WorkerGoals = Clean(WorkerGoals);
+        bombers = Clean(bombers);
+    }
+
+    public static T[] Clean<T>(T [] l)
+    {
+        List<T> b = new List<T>();
+        foreach (T g in l)
+            if (g != null)
+                b.Add(g);
+        T[] r = new T[b.Count];
+        int i = 0;
+        foreach (T g in b)
+            r[i++] = g;
+        return r;
+    }
+
+
+    public void InitControllers()
     {
         foreach (WorkerBFS goal in WorkerGoals)
-            goal.Set(map, this);
+                goal.Set(map, this);
         foreach (BomberSpawner b in bombers)
-            b.Init(map, this);
+                b.Init(map, this);
     }
 
     public void TileChanged(Tile t)

@@ -30,7 +30,7 @@ public class AreaConfig : MonoBehaviour
         {
             List<TileHolder.TileConfig> l = new List<TileHolder.TileConfig>();
             foreach (TileHolder.TileConfig t in group.Read())
-                l.Add(New(t));
+                l.Add(new TileHolder.TileConfig(t));
 
             foreach (ReadOrder ro in area.ReadOrder)
                 GetManipulation(ro)(l, area, group);
@@ -42,14 +42,14 @@ public class AreaConfig : MonoBehaviour
         }
     }
 
-    private TileHolder.TileConfig New(TileHolder.TileConfig t)
-    {
-        TileHolder.TileConfig r = new TileHolder.TileConfig();
-        r.pos = new Vector2Int(t.pos.x, t.pos.y);
-        r.TileTemplate = t.TileTemplate;
-        r.Action = t.Action;
-        return r;
-    }
+    //private TileHolder.TileConfig New(TileHolder.TileConfig t)
+    //{
+    //    TileHolder.TileConfig r = new TileHolder.TileConfig();
+    //    r.pos = new Vector2Int(t.pos.x, t.pos.y);
+    //    r.TileTemplate = t.TileTemplate;
+    //    r.Action = t.Action;
+    //    return r;
+    //}
 
     private manipulation GetManipulation(ReadOrder order)
     {
