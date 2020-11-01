@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class Bomber : MonoBehaviour
 {
+    public Grapple weapon;
+
     private Tile Target;
 
-    private Vector3 attackVector, approachVector;
-    private float attackPosition = 0, attackSpeed = 1f, attackDistance=10, attackHeight=4, bombSpeed=1;
+    private Vector3 attackVector, approachVector, referenceVector;
+    private float attackPosition = 0, attackSpeed = 10f, attackDistance=10, attackHeight=4, bombSpeed=1;
 
     private const int MaxHealth = 10;
     private int health = MaxHealth;
@@ -25,6 +27,8 @@ public class Bomber : MonoBehaviour
         approachVector = GetApproachVector();
 
         attackPosition = attackDistance;
+
+        StartCoroutine(Advance());
     }
 
     private Vector3 GetAttackVector()
@@ -37,26 +41,31 @@ public class Bomber : MonoBehaviour
         return Vector3.forward;
     }
 
-    private void Advance()
+    private IEnumerator Advance()
     {
-        if (attackPosition <= 0)
+        while (!attacking)
         {
-            attackPosition = 0;
-            if (!attacking)
-                StartCoroutine(AttackCo());
-        }
-        else
-        {
-            attackPosition -= Time.deltaTime * attackSpeed;
-            transform.position = Target.PullPoint.transform.position + attackVector + approachVector * attackPosition;
+            if (attackPosition <= 0)
+            {
+                attackPosition = 0;
+                if (!attacking)
+                    StartCoroutine(AttackCo());
+            }
+            else
+            {
+                attackPosition -= Time.deltaTime * attackSpeed;
+                transform.position = Target.PullPoint.transform.position + attackVector + approachVector * attackPosition;
+            }
+            yield return null;
         }
     }
 
     private IEnumerator AttackCo()
     {
         attacking = true;
-        while(true){
-            yield return new WaitForSeconds(bombSpeed);
+        while(attacking)
+        {
+            yield return new WaitForSeconds(attackSpeed);
             Attack();
         }
     }
@@ -64,11 +73,60 @@ public class Bomber : MonoBehaviour
     private void Attack()
     {
         print("Bomber: attack");
+        StartCoroutine(TempPullAnimate(.3f));
     }
 
-    // Update is called once per frame
-    void Update()
+    private IEnumerator TempPullAnimate(float seconds)
     {
-        Advance();
+        float wait = seconds / 3;
+
+        Vector3 target = Target.transform.position + Offset();
+
+        weapon.PointAt(target + Offset());
+        yield return new WaitForSeconds(wait);
+        weapon.PointAt(target + Offset());
+        yield return new WaitForSeconds(wait);
+        weapon.PointAt(target + Offset());
+        yield return new WaitForSeconds(wait);
+
+        weapon.Retract();
+
+        if (Target.TryKill(5))
+        {
+            attacking = false;
+            StartCoroutine(Leave());
+        }
     }
+
+
+    private IEnumerator Leave()
+    {
+        referenceVector = this.transform.position;
+        weapon.Retract();
+
+        while (!attacking)
+        {
+            if (attackPosition <= -attackDistance)
+            {
+                spawner.RemoveBomber(this);
+            }
+            else
+            {
+                attackPosition -= Time.deltaTime * attackSpeed;
+                transform.position = referenceVector + approachVector * attackPosition;
+            }
+            yield return null;
+        }
+    }
+
+    private Vector3 Offset()
+    {
+        return new Vector3(Random.Range(-2, 2), 0, Random.Range(-2, 2));
+    }
+
+    //// Update is called once per frame
+    //void Update()
+    //{
+    //    Advance();
+    //}
 }

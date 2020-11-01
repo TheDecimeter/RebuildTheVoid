@@ -180,7 +180,7 @@ public class Tile : MonoBehaviour
 
     public IEnumerable<Tile> GetTopLayer()
     {
-        if (Static)
+        if (Static || StackSize == 0)
             return new List<Tile>();
         if (Addons.Count > 0)
         {
@@ -188,6 +188,8 @@ public class Tile : MonoBehaviour
             Addons = new List<Tile>();
             return r;
         }
+
+
         print("getting top of tile ss:" + StackSize + " T.c" + Tiles.Count);
         Tile t = Tiles.Pop();
         StackSize--;
@@ -204,6 +206,42 @@ public class Tile : MonoBehaviour
         Level.TileChanged(this);
 
         return Inventory.Multi(t);
+    }
+
+
+    public bool TryKill(int damage)
+    {
+        if (Static)
+            return false;
+        health -= damage;
+        if(health <=0)
+        {
+            IEnumerable<Tile> tt = GetTopLayer();
+            foreach (Tile t in tt)
+                Destroy(t.gameObject);
+            health = MaxHealth;
+        }
+
+        if (StackSize == 0)
+        {
+            Pillar.gameObject.SetActive(false);
+            Floor.gameObject.SetActive(false);
+            KillPlayers();
+            return true;
+        }
+        else
+        {
+            UpdateHeight();
+            return false;
+        }
+    }
+
+    private void KillPlayers()
+    {
+        if (TouchingPlayer != null)
+            TouchingPlayer.Kill();
+        foreach (Character c in Touching)
+            Destroy(c.gameObject);
     }
 
     ~Tile()

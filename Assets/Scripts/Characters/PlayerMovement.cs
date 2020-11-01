@@ -11,6 +11,7 @@ public class PlayerMovement : Character
     public Grapple GrappleObject;
     public Inventory Inventory;
     public Camera Camera;
+    public GameObject DeathMessage;
 
     public TextMeshProUGUI ActionHUD;
 
@@ -461,5 +462,10 @@ public class PlayerMovement : Character
         if (transform.position.y > t.PullPoint.transform.position.y)
             return false;
         return t.StackSize - currentTile.StackSize == 1;
+    }
+
+    public void Kill()
+    {
+        DeathMessage.SetActive(true);
     }
 }

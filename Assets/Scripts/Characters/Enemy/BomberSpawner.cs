@@ -59,6 +59,7 @@ public class BomberSpawner : MonoBehaviour
     public void RemoveBomber(Bomber bomber)
     {
         bombers.Remove(bomber);
+        Destroy(bomber.gameObject);
     }
 
     private void setBounds()
