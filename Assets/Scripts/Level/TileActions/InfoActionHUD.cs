@@ -4,17 +4,28 @@ using UnityEngine;
 
 public class InfoActionHUD : MonoBehaviour
 {
+    public bool CloseOnPress = true;
+    private void Start()
+    {
+        if(CloseOnPress)
+            PlayerMovement.stopInput = true;
+    }
+
     public void Activate(bool activate)
     {
         if (activate)
         {
             gameObject.SetActive(true);
-            PlayerMovement.stopInput = true;
+            if (CloseOnPress)
+                PlayerMovement.stopInput = true;
         }
         else
         {
-            gameObject.SetActive(false);
-            PlayerMovement.stopInput = false;
+            if (CloseOnPress)
+            {
+                gameObject.SetActive(false);
+                PlayerMovement.stopInput = false;
+            }
         }
     }
 

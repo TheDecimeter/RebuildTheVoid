@@ -4,32 +4,37 @@ using UnityEngine;
 
 public class InfoAction : TileAction
 {
-    public string StartMessage = "";
+    public string ToutMessage = "";
+    public string IntroMessage = "";
     public InfoActionHUD InfoMessage;
-    public float ShowFor = 3;
     private Tile tile;
 
 
     public override void Init(Tile tile)
     {
-        StartMessage = StartMessage.Replace("\\n", "\n");
+        ToutMessage = ToutMessage.Replace("\\n", "\n");
+        IntroMessage = IntroMessage.Replace("\\n", "\n");
         this.tile = tile;
-        this.tile.Text.Show(StartMessage);
+        this.tile.Text.Show(ToutMessage);
     }
 
-    public override void Action(PlayerMovement player)
+    public override bool Action(PlayerMovement player)
     {
         InfoMessage.Activate(true);
+        return true;
     }
 
     public override void OnTouchBegin(PlayerMovement player)
     {
+        this.tile.Text.Show(IntroMessage);
     }
     public override void OnTouchUpdate(PlayerMovement player)
     {
+
     }
 
     public override void OnTouchLeft(PlayerMovement player)
     {
+        this.tile.Text.Show(ToutMessage);
     }
 }

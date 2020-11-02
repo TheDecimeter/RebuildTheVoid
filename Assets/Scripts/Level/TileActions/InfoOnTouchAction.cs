@@ -2,37 +2,41 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileTextAction : TileAction
+public class InfoOnTouchAction : TileAction
 {
-    public string StartMessage = "";
-    public string ActionMessage = "";
-    public float ShowFor = 3;
+    public string ToutMessage = "";
+    public InfoActionHUD InfoMessage;
+
     private Tile tile;
+    private bool shown = false;
 
 
     public override void Init(Tile tile)
     {
-        StartMessage = StartMessage.Replace("\\n", "\n");
-        ActionMessage = ActionMessage.Replace("\\n", "\n");
+        ToutMessage = ToutMessage.Replace("\\n", "\n");
         this.tile = tile;
-        this.tile.Text.Show(StartMessage);
+        this.tile.Text.Show(ToutMessage);
     }
 
     public override bool Action(PlayerMovement player)
     {
-        //print("Tile Text Action triggered");
-        tile.Text.Show(ActionMessage,ShowFor);
-        return true;
+        return false;
     }
 
     public override void OnTouchBegin(PlayerMovement player)
     {
+        if (shown)
+            return;
+        shown = true;
+        InfoMessage.Activate(true);
     }
     public override void OnTouchUpdate(PlayerMovement player)
     {
+
     }
 
     public override void OnTouchLeft(PlayerMovement player)
     {
+        this.tile.Text.Show(ToutMessage);
     }
 }

@@ -376,6 +376,8 @@ public class PlayerMovement : Character
     }
     private void PlaceTileOnTop(Tile t)
     {
+        if (t.Static)
+            return;
         IEnumerable<Tile> tiles;
         if (Inventory.TryGetItem(out tiles))
             t.Add(tiles);

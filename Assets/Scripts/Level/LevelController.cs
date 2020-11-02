@@ -48,6 +48,11 @@ public class LevelController : MonoBehaviour
 
     }
 
+    public void InitWinCondition(CheckWin win)
+    {
+        win.Init(map, this);
+    }
+
     private void GenerateLevel(int length, int width)
     {
         ResetMap(length, width);

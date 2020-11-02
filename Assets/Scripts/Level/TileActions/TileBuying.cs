@@ -35,7 +35,7 @@ public class TileBuying : TileAction
     }
     
 
-    public override void Action(PlayerMovement player)
+    public override bool Action(PlayerMovement player)
     {
         if (Inventory.SellPlayerAnItem(realTileToSell))
         {
@@ -46,7 +46,7 @@ public class TileBuying : TileAction
         {
             BuyPlayersTile();
         }
-        
+        return true;
     }
 
     private void SellPlayerTheTile()

@@ -24,10 +24,8 @@ public class Gun : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Bomber b = other.gameObject.GetComponent<Bomber>();
-        print("enemy discovered");
         if (b)
         {
-            print("bomber discovered");
             enemies.Push(b);
             if (enemies.Count == 1)
                 StartCoroutine(Shoot());

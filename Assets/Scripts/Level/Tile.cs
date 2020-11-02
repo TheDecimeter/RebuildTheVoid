@@ -145,6 +145,7 @@ public class Tile : MonoBehaviour
         StackSize++;
         
         tile.transform.position = LevelController.PhysicalLocation(x, y);
+        if (Pillar.transform == null) Debug.LogError("pillar is null");
         tile.transform.SetParent(Pillar.transform);
         Tiles.Push(tile);
 
@@ -162,8 +163,9 @@ public class Tile : MonoBehaviour
             Destroy(this.action.gameObject);
 
         //print("setting action for " + x + " " + y);
-
         GameObject g = Instantiate(action.gameObject);
+        g.transform.SetParent(Pillar.transform);
+        g.name = "Action for" + gameObject.name;
         
         this.action = g.GetComponent<TileAction>();
         this.action.Init(this);
@@ -176,8 +178,7 @@ public class Tile : MonoBehaviour
             return false;
         }
         //print("yes action for " + x + " " + y);
-        action.Action(player);
-        return true;
+        return action.Action(player);
     }
 
     public IEnumerable<Tile> GetTopLayer()
