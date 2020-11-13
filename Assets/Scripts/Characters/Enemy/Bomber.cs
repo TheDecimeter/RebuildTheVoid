@@ -20,6 +20,8 @@ public class Bomber : MonoBehaviour
     private bool attacking = false;
     private BomberSpawner spawner;
 
+    private static bool didWarningShot = false;
+
 
     public void Init(Tile target, BomberSpawner spawner)
     {
@@ -33,7 +35,8 @@ public class Bomber : MonoBehaviour
 
         StartCoroutine(Advance());
 
-        StartCoroutine(WarningShoot(.1f, .2f));
+        if(!didWarningShot)
+            StartCoroutine(WarningShoot(.1f, .2f));
     }
 
     private Vector3 GetAttackVector()
@@ -119,7 +122,10 @@ public class Bomber : MonoBehaviour
                 {
                     timer += Time.deltaTime;
                     if (Target.HasPlayer())
+                    {
+                        didWarningShot = true;
                         weapon.PointAt(t);
+                    }
                     else
                         weapon.Retract();
                     yield return null;
