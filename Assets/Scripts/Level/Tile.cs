@@ -61,6 +61,10 @@ public class Tile : MonoBehaviour
     {
         Touching.Remove(character);
     }
+    public bool HasPlayer()
+    {
+        return TouchingPlayer != null;
+    }
     public void AddPlayer(PlayerMovement character)
     {
         TouchingPlayer = character;

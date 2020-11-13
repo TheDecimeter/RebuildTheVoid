@@ -32,6 +32,8 @@ public class Bomber : MonoBehaviour
         attackPosition = attackDistance;
 
         StartCoroutine(Advance());
+
+        StartCoroutine(WarningShoot(.1f, .2f));
     }
 
     private Vector3 GetAttackVector()
@@ -76,10 +78,10 @@ public class Bomber : MonoBehaviour
     private void Attack()
     {
         //print("Bomber: attack");
-        StartCoroutine(TempPullAnimate(.3f));
+        StartCoroutine(Shoot(.3f));
     }
 
-    private IEnumerator TempPullAnimate(float seconds)
+    private IEnumerator Shoot(float seconds)
     {
         float wait = seconds / 3;
 
@@ -99,6 +101,35 @@ public class Bomber : MonoBehaviour
             attacking = false;
             StartCoroutine(Leave());
         }
+    }
+
+    private IEnumerator WarningShoot(float waitShots, float waitCooldown)
+    {
+        float timer;
+
+        Vector3 target = Target.transform.position + Offset();
+
+        for(int i=0; i<3; ++i)
+        {
+            for (int j = 0; j < 2; ++j)
+            {
+                timer = 0;
+                Vector3 t = target + Offset();
+                while (timer < waitShots)
+                {
+                    timer += Time.deltaTime;
+                    if (Target.HasPlayer())
+                        weapon.PointAt(t);
+                    else
+                        weapon.Retract();
+                    yield return null;
+                }
+            }
+
+            weapon.Retract();
+            yield return new WaitForSeconds(waitCooldown);
+        }
+
     }
 
 
