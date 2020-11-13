@@ -44,6 +44,7 @@ public class Tile : MonoBehaviour
 
     private Stack<Tile> Tiles = new Stack<Tile>();
     private List<Tile> Addons = new List<Tile>();
+    private bool getTile = true;
 
     public void SetPos(int x, int y)
     {
@@ -87,6 +88,8 @@ public class Tile : MonoBehaviour
     public void OnTouchUpdate(PlayerMovement player)
     {
         Text.LookAt(player.Camera.transform);
+        if (action != null)
+            action.OnTouchUpdate(player);
     }
     public void OnTouchLeft(PlayerMovement player)
     {
@@ -94,6 +97,8 @@ public class Tile : MonoBehaviour
         RemoveCharacter(player);
         if (action != null)
             action.OnTouchLeft(player);
+
+        getTile = false;
     }
     public void OnTouchBegin(PlayerMovement player)
     {
@@ -131,9 +136,11 @@ public class Tile : MonoBehaviour
 
     private void AddAddon(Tile tile)
     {
-        tile.transform.position = LevelController.PhysicalLocation(x, y);
+        //tile.transform.position = LevelController.PhysicalLocation(x, y);
         tile.transform.SetParent(Pillar.transform);
+        tile.transform.localPosition = Vector3.zero;
         Addons.Add(tile);
+        getTile = false;
     }
     private void AddSolidTile(Tile tile)
     {
@@ -144,15 +151,17 @@ public class Tile : MonoBehaviour
         }
         StackSize++;
         
-        tile.transform.position = LevelController.PhysicalLocation(x, y);
+        //tile.transform.position = LevelController.PhysicalLocation(x, y);
         if (Pillar.transform == null) Debug.LogError("pillar is null");
         tile.transform.SetParent(Pillar.transform);
+        tile.transform.localPosition = Vector3.zero;
         Tiles.Push(tile);
 
         UpdateHeight();
         Static = tile.Static;
 
         Level.TileChanged(this);
+        getTile = true;
     }
 
     public void AddAction(TileAction action)
@@ -185,7 +194,7 @@ public class Tile : MonoBehaviour
     {
         if (Static || StackSize == 0)
             return new List<Tile>();
-        if (Addons.Count > 0)
+        if (!getTile&&Addons.Count > 0)
         {
             List<Tile> r = Addons;
             Addons = new List<Tile>();
@@ -207,6 +216,8 @@ public class Tile : MonoBehaviour
 
 
         Level.TileChanged(this);
+
+        getTile = false;
 
         return Inventory.Multi(t);
     }

@@ -9,6 +9,7 @@ public class PlayerMovement : Character
     public float Acceleration;
     public float LaunchPower;
     public Grapple GrappleObject;
+    public Grapple AutoGrapple;
     public Inventory Inventory;
     public Camera Camera;
     public GameObject DeathMessage;
@@ -133,6 +134,7 @@ public class PlayerMovement : Character
             {
                 rb.AddForce(dir.normalized * Acceleration, ForceMode.Acceleration);
                 GrappleObject.PointAt(pullPoint);
+                AutoGrapple.Retract();
             }
         }
         else
@@ -389,11 +391,11 @@ public class PlayerMovement : Character
         float pooptimer = 0;
         while (pooptimer < seconds)
         {
-            GrappleObject.PointAt(pullPoint);
+            AutoGrapple.PointAt(pullPoint);
             pooptimer += Time.deltaTime;
             yield return null;
         }
-        GrappleObject.Retract();
+        AutoGrapple.Retract();
     }
 
     private void GetTile(Tile t)
