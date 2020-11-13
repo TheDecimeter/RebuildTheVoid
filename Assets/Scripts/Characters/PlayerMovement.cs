@@ -27,24 +27,31 @@ public class PlayerMovement : Character
     private float holdTimer = 0, lastAngle=0, deltaAngle, deltaAngleAction;
     private const float thrustTime = .1f, decayTime = .5f;
 
-    private Vector3 lastDirToPillar;
+    private Vector3 lastDirToPillar, heading;
 
     private Tile currentTile,previousTile, previousEmbankment;
 
     private int tileX, tileZ;
 
     Rigidbody rb;
+
+    private void Awake()
+    {
+        heading = Vector3.zero;
+        stopInput = false;
+        rb = GetComponent<Rigidbody>();
+    }
     // Start is called before the first frame update
     void Start()
     {
-        stopInput = false;
-        rb = GetComponent<Rigidbody>();
         currentTile = Level.MapTile(gameObject);
     }
 
     // Update is called once per frame
     void Update()
     {
+        FaceForward();
+
         Tile t = Level.MapTile(gameObject);
         t.OnTouchUpdate(this);
         ThrustCheck();
@@ -54,6 +61,28 @@ public class PlayerMovement : Character
             JumpCheck(t);
 
         FallenCheck();
+
+    }
+
+    private void FaceForward()
+    {
+        if (rb.velocity != Vector3.zero)
+        {
+            Vector3 face = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+            if (face != Vector3.zero && face.magnitude > .05f)
+            {
+                heading = face;
+                if(buttonPressed)
+                    transform.forward = face.normalized;
+                return;
+            }
+        }
+        heading = Vector3.zero;
+    }
+
+    public Vector3 GetLookAhead()
+    {
+        return heading;
     }
 
     private void FallenCheck()
