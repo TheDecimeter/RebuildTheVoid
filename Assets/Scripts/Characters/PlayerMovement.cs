@@ -24,7 +24,6 @@ public class PlayerMovement : Character
 
     private float tileWidth = 4.5f;
     private float rotationRadius = 1f;
-    private float rotationDirection = 0;
     private float holdTimer = 0, lastAngle=0, deltaAngle, deltaAngleAction;
     private const float thrustTime = .1f, decayTime = .5f;
 
@@ -36,8 +35,12 @@ public class PlayerMovement : Character
 
     Rigidbody rb;
 
+    private delegate Vector3 Heading(Vector3 pullPoint);
+    private Heading GetHeading;
+
     private void Awake()
     {
+        GetHeading = GetHeadingClckwise;
         heading = Vector3.zero;
         stopInput = false;
         rb = GetComponent<Rigidbody>();
@@ -141,6 +144,8 @@ public class PlayerMovement : Character
                     deltaAngle = 0;
                     deltaAngleAction = 0;
                     lastDirToPillar = pillar - transform.position;
+
+                    GetHeading = CalculateHeading(pullPoint);
                 }
 
             }
@@ -478,33 +483,56 @@ public class PlayerMovement : Character
         return true;
     }
 
-    private Vector3 GetHeading(Vector3 pillarPos)
+    /// <summary>
+    /// Figure out which side of a pillar to rotate around based
+    /// either on velocity, or character direction
+    /// </summary>
+    /// <param name="pillarPos"></param>
+    private Heading CalculateHeading(Vector3 pillarPos)
+    {
+        Vector3 heading = rb.velocity;
+        if (heading == Vector3.zero)
+            heading = transform.forward;
+
+        Vector3 toPillar = pillarPos - transform.position;
+
+        if (Mathf.Sign(Vector3.Cross(toPillar, heading).y) < 0)
+            return GetHeadingClckwise;
+        else
+            return GetHeadingCntrClckwise;
+    }
+
+    /// <summary>
+    /// rotate around a pillar counter clockwise
+    /// </summary>
+    /// <param name="pillarPos"></param>
+    /// <returns></returns>
+    private Vector3 GetHeadingCntrClckwise(Vector3 pillarPos)
     {
         Vector3 sideOfPillar;
-        //if (rotationDirection != 0)
-        //{
-        //    Vector3 toPillar = pillarPos - transform.position;
-        //    sideOfPillar = new Vector3(toPillar.z, 0, -toPillar.x);
-        //    sideOfPillar = sideOfPillar.normalized * .2f * rotationDirection;
-        //}
-       //else //if(rb.velocity.magnitude<.001)
-        {
-            Vector3 toPillar = pillarPos - transform.position;
-            sideOfPillar = new Vector3(toPillar.z, 0, -toPillar.x);
-            sideOfPillar = sideOfPillar.normalized * rotationRadius;
-            rotationDirection = 1;
-        }
-        //else
-        //{
-        //    Vector3 toPillar = pillarPos - transform.position;
-        //    sideOfPillar = new Vector3(toPillar.z, 0, -toPillar.x);
+        Vector3 toPillar = pillarPos - transform.position;
+        sideOfPillar = new Vector3(toPillar.z, 0, -toPillar.x);
+        sideOfPillar = sideOfPillar.normalized * rotationRadius;
+        
 
-        //    float headingLeftOrRightOfPillar = Mathf.Sign(Vector3.Cross(toPillar, rb.velocity).y);
-        //    rotationDirection = headingLeftOrRightOfPillar;
+        Vector3 offsetTargetPos = new Vector3(pillarPos.x + sideOfPillar.x, 0, pillarPos.z + sideOfPillar.z);
+        Vector3 heading = offsetTargetPos - transform.position;
+        heading.Normalize();
+        return new Vector3(heading.x, 0, heading.z);
+    }
 
-        //    sideOfPillar = sideOfPillar.normalized * .2f * rotationDirection*rotationDirection;
-
-        //}
+    /// <summary>
+    /// rotate around a pillar clockwise
+    /// </summary>
+    /// <param name="pillarPos"></param>
+    /// <returns></returns>
+    private Vector3 GetHeadingClckwise(Vector3 pillarPos)
+    {
+        Vector3 sideOfPillar;
+        Vector3 toPillar = pillarPos - transform.position;
+        sideOfPillar = new Vector3(-toPillar.z, 0, toPillar.x);
+        sideOfPillar = sideOfPillar.normalized * rotationRadius;
+        
 
         Vector3 offsetTargetPos = new Vector3(pillarPos.x + sideOfPillar.x, 0, pillarPos.z + sideOfPillar.z);
         Vector3 heading = offsetTargetPos - transform.position;
