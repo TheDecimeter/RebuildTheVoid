@@ -557,7 +557,7 @@ public class PlayerMovement : Character
     public void Respawn()
     {
         dead = false;
-        DeathMessage.SetActive(true);
+        DeathMessage.SetActive(false);
         Warp(5, previousEmbankment.PullPoint.transform.position);
     }
 }
