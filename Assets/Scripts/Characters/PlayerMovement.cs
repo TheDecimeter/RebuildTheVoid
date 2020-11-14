@@ -189,7 +189,7 @@ public class PlayerMovement : Character
             {
                 
                 rb.AddForce(rb.velocity * -Acceleration/4, ForceMode.Acceleration);
-                if (toPillar.magnitude <= 1)
+                if (deltaAngle> 480*1.5)//(toPillar.magnitude <= 1)
                 {
                     rb.AddForce(toPillar * Acceleration, ForceMode.Acceleration);
                     deltaAngleAction += angle;

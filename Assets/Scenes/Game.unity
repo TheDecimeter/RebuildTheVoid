@@ -282,6 +282,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e77d2fa36267d684bafea3a89df09374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MinDisplayTime: 0.5
   CloseOnPress: 1
 --- !u!114 &22678943
 MonoBehaviour:
@@ -471,11 +472,11 @@ MonoBehaviour:
     lineCount: 8
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
+  m_havePropertiesChanged: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 0
+  m_isInputParsingRequired: 1
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:
@@ -701,7 +702,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1032694828}
-  - {fileID: 1745106547}
   - {fileID: 261496287}
   - {fileID: 280820418}
   - {fileID: 2087944643}
@@ -759,6 +759,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e77d2fa36267d684bafea3a89df09374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MinDisplayTime: 0.5
   CloseOnPress: 1
 --- !u!114 &124070559
 MonoBehaviour:
@@ -1910,6 +1911,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e77d2fa36267d684bafea3a89df09374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MinDisplayTime: 0.5
   CloseOnPress: 1
 --- !u!114 &251919635
 MonoBehaviour:
@@ -1977,7 +1979,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 109583302}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &261496288
 MonoBehaviour:
@@ -2187,7 +2189,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 109583302}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &280820419
 MonoBehaviour:
@@ -2987,6 +2989,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e77d2fa36267d684bafea3a89df09374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MinDisplayTime: 0.5
   CloseOnPress: 1
 --- !u!114 &443561725
 MonoBehaviour:
@@ -3473,6 +3476,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e77d2fa36267d684bafea3a89df09374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MinDisplayTime: 0.5
   CloseOnPress: 1
 --- !u!114 &479590546
 MonoBehaviour:
@@ -4674,6 +4678,8 @@ Transform:
   m_Children:
   - {fileID: 704646057}
   - {fileID: 885048998}
+  - {fileID: 1383177679}
+  - {fileID: 1401024278}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6855,6 +6861,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e77d2fa36267d684bafea3a89df09374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MinDisplayTime: 0.5
   CloseOnPress: 1
 --- !u!114 &872015696
 MonoBehaviour:
@@ -7005,6 +7012,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e77d2fa36267d684bafea3a89df09374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MinDisplayTime: 0.5
   CloseOnPress: 1
 --- !u!114 &889423493
 MonoBehaviour:
@@ -7512,6 +7520,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e77d2fa36267d684bafea3a89df09374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MinDisplayTime: 0.5
   CloseOnPress: 1
 --- !u!114 &944602141
 MonoBehaviour:
@@ -7682,6 +7691,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e77d2fa36267d684bafea3a89df09374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MinDisplayTime: 0.5
   CloseOnPress: 0
 --- !u!1 &1000419526
 GameObject:
@@ -7800,6 +7810,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e77d2fa36267d684bafea3a89df09374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MinDisplayTime: 0.5
   CloseOnPress: 1
 --- !u!114 &1009035900
 MonoBehaviour:
@@ -7940,6 +7951,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e77d2fa36267d684bafea3a89df09374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MinDisplayTime: 0.5
   CloseOnPress: 1
 --- !u!114 &1017722077
 MonoBehaviour:
@@ -8103,6 +8115,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1739463872}
+  - {fileID: 1908887032}
   m_Father: {fileID: 412713407}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8612,8 +8625,6 @@ Transform:
   - {fileID: 1513863093}
   - {fileID: 1823517687}
   - {fileID: 2120877671}
-  - {fileID: 1383177679}
-  - {fileID: 1401024278}
   m_Father: {fileID: 1988248258}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8648,16 +8659,16 @@ MonoBehaviour:
     Action: {fileID: 1513863092}
   - pos: {x: 2, y: 1}
     TileTemplate: {fileID: 0}
-    Action: {fileID: 0}
+    Action: {fileID: 1401024279}
   - pos: {x: 2, y: 2}
     TileTemplate: {fileID: 0}
-    Action: {fileID: 1383177680}
+    Action: {fileID: 0}
   - pos: {x: 2, y: 3}
     TileTemplate: {fileID: 0}
-    Action: {fileID: 1401024279}
+    Action: {fileID: 0}
   - pos: {x: 2, y: 4}
     TileTemplate: {fileID: 0}
-    Action: {fileID: 0}
+    Action: {fileID: 1383177680}
 --- !u!1 &1184533526
 GameObject:
   m_ObjectHideFlags: 0
@@ -9400,6 +9411,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e77d2fa36267d684bafea3a89df09374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MinDisplayTime: 0.5
   CloseOnPress: 1
 --- !u!114 &1293592676
 MonoBehaviour:
@@ -9901,11 +9913,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1383177678}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 14.587704, y: 1.5, z: 54.52779}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1134344684}
-  m_RootOrder: 5
+  m_Father: {fileID: 642668949}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1383177680
 MonoBehaviour:
@@ -9952,11 +9964,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1401024277}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 14.587704, y: 1.5, z: 54.52779}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1134344684}
-  m_RootOrder: 6
+  m_Father: {fileID: 642668949}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1401024279
 MonoBehaviour:
@@ -11631,7 +11643,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1733869050}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 13, y: 6.44, z: 13}
+  m_LocalPosition: {x: 33, y: 6.44, z: 33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 525227033}
@@ -11701,6 +11713,7 @@ Transform:
   - {fileID: 194390553}
   - {fileID: 243727971}
   - {fileID: 1988248258}
+  - {fileID: 1745106547}
   m_Father: {fileID: 1064248526}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -11717,8 +11730,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   area:
-    OffsetX: 1
-    OffsetY: 1
+    OffsetX: 3
+    OffsetY: 3
     ReadOrder: 
     Groups:
     - {fileID: 194390554}
@@ -11753,8 +11766,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71cbfb1578278c046be3d30b10e965d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Goal1: {x: 7, y: 3}
-  Goal2: {x: 1, y: 1}
+  Goal1: {x: 13, y: 4}
+  Goal2: {x: 6, y: 4}
   MaxDist: 15
 --- !u!4 &1745106547
 Transform:
@@ -11768,8 +11781,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1942611809}
-  m_Father: {fileID: 109583302}
-  m_RootOrder: 1
+  m_Father: {fileID: 1739463872}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1746306366
 GameObject:
@@ -11927,6 +11940,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e77d2fa36267d684bafea3a89df09374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MinDisplayTime: 0.5
   CloseOnPress: 1
 --- !u!114 &1770197997
 MonoBehaviour:
@@ -12469,6 +12483,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e77d2fa36267d684bafea3a89df09374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MinDisplayTime: 0.5
   CloseOnPress: 1
 --- !u!114 &1871332697
 MonoBehaviour:
@@ -12576,6 +12591,54 @@ Transform:
   m_Father: {fileID: 1556744325}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1908887031
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1908887032}
+  - component: {fileID: 1908887033}
+  m_Layer: 0
+  m_Name: ClosestIsland
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1908887032
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1908887031}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1064248526}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1908887033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1908887031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 463d4c578c876e04c8db3b2180bb4485, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  area:
+    OffsetX: 0
+    OffsetY: 0
+    ReadOrder: 
+    Groups: []
 --- !u!1 &1909603244
 GameObject:
   m_ObjectHideFlags: 0
@@ -12747,7 +12810,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Goals: {fileID: 1745106546}
-  StartMapPos: {x: 1, y: 4}
+  StartMapPos: {x: 3, y: 3}
 --- !u!23 &1942611811
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -13254,6 +13317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e77d2fa36267d684bafea3a89df09374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MinDisplayTime: 0.5
   CloseOnPress: 1
 --- !u!114 &2067882709
 MonoBehaviour:
@@ -13337,7 +13401,7 @@ Transform:
   - {fileID: 865264739}
   - {fileID: 555004313}
   m_Father: {fileID: 109583302}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2087944644
 MonoBehaviour:
