@@ -22,12 +22,12 @@ public class TileText : MonoBehaviour
     {
         StopAllCoroutines();
         text.text = message;
-        print("setting message " + message);
+        //print("setting message " + message);
     }
 
     public void Show(string message, float time)
     {
-        print("setting temp message " + message);
+        //print("setting temp message " + message);
         StopAllCoroutines();
         StartCoroutine(ShowTempMessageCoroutine(message, time));
     }
@@ -39,6 +39,6 @@ public class TileText : MonoBehaviour
         yield return new WaitForSeconds(time);
         text.text = oldMessage;
 
-        print("resetting message " + oldMessage);
+        //print("resetting message " + oldMessage);
     }
 }

@@ -28,7 +28,7 @@ public class PlayerMovement : Character
     private float holdTimer = 0, lastAngle=0, deltaAngle, deltaAngleAction;
     private const float thrustTime = .1f, decayTime = .5f;
 
-    private Vector3 lastDirToPillar, heading;
+    private Vector3 lastDirToPillar, heading, lastPos;
 
     private Tile currentTile,previousTile, previousEmbankment;
 
@@ -85,6 +85,8 @@ public class PlayerMovement : Character
     {
         return heading;
     }
+
+    
 
     private void FallenCheck()
     {
@@ -357,10 +359,11 @@ public class PlayerMovement : Character
                     }
                 }
 
-                rb.velocity = new Vector3(rb.velocity.x * x, 0, rb.velocity.z * z);
+                rb.velocity = new Vector3(rb.velocity.x * x, rb.velocity.y, rb.velocity.z * z);
 
                 if( x == -1 || z == -1)
                 {
+                    transform.position = lastPos;
                     //rb.velocity = new Vector3(rb.velocity.x * x, 0, rb.velocity.z * z);
                     StartCoroutine(TempPullAnimate(.1f));
                     return true;
@@ -370,6 +373,7 @@ public class PlayerMovement : Character
             }
             else
             {
+                lastPos = transform.position;
                 currentTile.OnTouchLeft(this);
                 previousTile = currentTile;
                 currentTile = t;
@@ -381,6 +385,10 @@ public class PlayerMovement : Character
                     previousEmbankment = t;
                 LevelController.MapLocation(gameObject, out this.tileX, out tileZ);
             }
+        }
+        else if (Safe(t))
+        {
+            lastPos = transform.position;
         }
 
         return false;
@@ -529,5 +537,12 @@ public class PlayerMovement : Character
     {
         dead = true;
         DeathMessage.SetActive(true);
+    }
+
+    public void Respawn()
+    {
+        dead = false;
+        DeathMessage.SetActive(true);
+        Warp(5, previousEmbankment.PullPoint.transform.position);
     }
 }
