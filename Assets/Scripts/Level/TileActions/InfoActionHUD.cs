@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class InfoActionHUD : MonoBehaviour
 {
+    private float timer = .5f;
     public bool CloseOnPress = true;
     private void Start()
     {
@@ -15,6 +16,7 @@ public class InfoActionHUD : MonoBehaviour
     {
         if (activate)
         {
+            timer = 0;
             gameObject.SetActive(true);
             if (CloseOnPress)
                 PlayerMovement.stopInput = true;
@@ -32,7 +34,8 @@ public class InfoActionHUD : MonoBehaviour
 
     private void Update()
     {
-        if (Input.anyKeyDown)
+        timer -= Time.deltaTime;
+        if (timer < 0 && Input.anyKeyDown)
         {
             Activate(false);
         }

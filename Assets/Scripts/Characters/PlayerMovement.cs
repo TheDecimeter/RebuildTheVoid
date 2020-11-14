@@ -67,6 +67,11 @@ public class PlayerMovement : Character
 
     private void FaceForward()
     {
+        if (stopInput)
+        {
+            return;
+        }
+
         if (rb.velocity != Vector3.zero)
         {
             Vector3 face = new Vector3(rb.velocity.x, 0, rb.velocity.z);
@@ -86,8 +91,6 @@ public class PlayerMovement : Character
         return heading;
     }
 
-    
-
     private void FallenCheck()
     {
         if (dead)
@@ -106,6 +109,18 @@ public class PlayerMovement : Character
     private void Warp(float height, Vector3 loc)
     {
         transform.position = new Vector3(loc.x, loc.y + height, loc.z);
+    }
+
+    public void SetDirection(Vector3 dir)
+    {
+        if (dir == Vector3.zero)
+            return;
+
+        heading = Vector3.zero;
+        transform.forward = dir.normalized;
+
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
     }
 
     private void ThrustCheck()
