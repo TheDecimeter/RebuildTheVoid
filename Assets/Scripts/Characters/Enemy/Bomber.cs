@@ -12,10 +12,10 @@ public class Bomber : MonoBehaviour
     private Tile Target;
 
     private Vector3 attackVector, approachVector, referenceVector;
-    private float attackDistance = 50, attackHeight = 4, attackPosition = 0;
+    private float attackDistance = 80, attackHeight = 4, attackPosition = 0;
 
-    private const int MaxHealth = 10;
-    private int health = MaxHealth;
+    public int MaxHealth = 10;
+    private int health;
 
     private bool attacking = false;
     private BomberSpawner spawner;
@@ -25,9 +25,12 @@ public class Bomber : MonoBehaviour
 
     public void Init(Tile target, BomberSpawner spawner)
     {
+        health = MaxHealth;
         this.Target = target;
         this.spawner = spawner;
 
+        attackDistance *= Random.Range(.9f, 1.4f);
+        attackHeight *= Random.Range(.9f, 1.4f);
         attackVector = GetAttackVector()*attackHeight;
         approachVector = GetApproachVector();
 
@@ -46,7 +49,7 @@ public class Bomber : MonoBehaviour
 
     private Vector3 GetApproachVector()
     {
-        return Vector3.forward;
+        return (Vector3.forward * Random.Range(.9f,1.2f)+Vector3.up * Random.Range(.5f, .7f)).normalized;
     }
 
     private IEnumerator Advance()
@@ -84,11 +87,18 @@ public class Bomber : MonoBehaviour
         StartCoroutine(Shoot(.3f));
     }
 
+    private Vector3 ShootPoint()
+    {
+        Vector3 t = Target.transform.position + Offset();
+        return new Vector3(t.x, t.y + (Target.StackSize+1.5f), t.z);
+        //return Target.Floor.transform.position + Offset();
+    }
+
     private IEnumerator Shoot(float seconds)
     {
         float wait = seconds / 3;
 
-        Vector3 target = Target.transform.position + Offset();
+        Vector3 target = ShootPoint();
 
         weapon.PointAt(target + Offset());
         yield return new WaitForSeconds(wait);
@@ -102,6 +112,7 @@ public class Bomber : MonoBehaviour
         if (Target.TryKill(damage))
         {
             attacking = false;
+            StopAllCoroutines();
             StartCoroutine(Leave());
         }
     }
@@ -110,7 +121,7 @@ public class Bomber : MonoBehaviour
     {
         float timer;
 
-        Vector3 target = Target.transform.position + Offset();
+        Vector3 target = ShootPoint();
 
         for(int i=0; i<3; ++i)
         {
@@ -143,6 +154,7 @@ public class Bomber : MonoBehaviour
     {
         referenceVector = this.transform.position;
         weapon.Retract();
+        approachVector = new Vector3(approachVector.x, -approachVector.y, approachVector.z);
 
         while (!attacking)
         {

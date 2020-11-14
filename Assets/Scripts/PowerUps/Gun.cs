@@ -6,7 +6,7 @@ public class Gun : MonoBehaviour
 {
     public float fireRate = 1;
     public float CoolDown = .5f;
-    public int damage = 3;
+    public float damage = 3;
     public float range = 10;
 
     public SphereCollider rangeFinder;
@@ -54,8 +54,16 @@ public class Gun : MonoBehaviour
                     yield return null;
                 }
                 weapon.Retract();
-                print("shoot at enemy");
-            } while (!b.TryKill(damage));
+            } while (!b.TryKill(Damage()));
         }
+    }
+
+    private int Damage()
+    {
+        if (damage >= 1)
+            return (int)damage;
+        if (Random.Range(0f, 1f) < damage)
+            return 1;
+        return 0;
     }
 }

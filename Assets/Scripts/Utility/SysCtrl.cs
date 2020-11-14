@@ -9,4 +9,9 @@ public class SysCtrl : MonoBehaviour
     {
         SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
     }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 }
