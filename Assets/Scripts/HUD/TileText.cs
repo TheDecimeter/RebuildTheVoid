@@ -20,11 +20,15 @@ public class TileText : MonoBehaviour
 
     public void Show(string message)
     {
+        StopAllCoroutines();
         text.text = message;
+        print("setting message " + message);
     }
 
     public void Show(string message, float time)
     {
+        print("setting temp message " + message);
+        StopAllCoroutines();
         StartCoroutine(ShowTempMessageCoroutine(message, time));
     }
 
@@ -34,5 +38,7 @@ public class TileText : MonoBehaviour
         text.text = message;
         yield return new WaitForSeconds(time);
         text.text = oldMessage;
+
+        print("resetting message " + oldMessage);
     }
 }

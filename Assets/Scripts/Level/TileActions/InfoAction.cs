@@ -27,6 +27,7 @@ public class InfoAction : TileAction
     public override void OnTouchBegin(PlayerMovement player)
     {
         this.tile.Text.Show(IntroMessage);
+        player.UpdateActionMessage("Info");
     }
     public override void OnTouchUpdate(PlayerMovement player)
     {

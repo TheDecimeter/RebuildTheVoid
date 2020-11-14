@@ -25,6 +25,7 @@ public class InfoOnTouchAction : TileAction
 
     public override void OnTouchBegin(PlayerMovement player)
     {
+        player.UpdateActionMessage(null);
         if (shown)
             return;
         shown = true;

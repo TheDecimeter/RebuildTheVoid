@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TileBuying : TileAction
 {
+    private const int askPlayerToSellState = 0, askPlayerToBuyState = 1;
     public string ToutMessage = "";
     public string SalesMessage = "";
     public string BuyMessage = "";
@@ -16,6 +17,7 @@ public class TileBuying : TileAction
 
     private Tile homeTile;
 
+    private int playerState = askPlayerToSellState;
 
     public override void Init(Tile tile)
     {
@@ -39,29 +41,32 @@ public class TileBuying : TileAction
     {
         if (Inventory.SellPlayerAnItem(realTileToSell))
         {
-            SellPlayerTheTile();
+            SellPlayerTheTile(player);
             realTileToSell = Inventory.CloneTile(TileToSell);
         }
         else
         {
-            BuyPlayersTile();
+            BuyPlayersTile(player);
         }
         return true;
     }
 
-    private void SellPlayerTheTile()
+    private void SellPlayerTheTile(PlayerMovement player)
     {
-        BuyMessage = BuyMessage.Replace("@c", "" + Inventory.InventoryValue());
-        homeTile.Text.Show(BuyMessage);
+        //string m = BuyMessage.Replace("@c", "" + Inventory.InventoryValue());
+        //print("selling player the tile "+m);
+        //homeTile.Text.Show(m); //orbit to sell
+        AskPlayerToSell(player);
         homeTile.Text.Show(OnSoldItemToYou, PurchaseMessageDelay);
     }
 
-    private void BuyPlayersTile()
+    private void BuyPlayersTile(PlayerMovement player)
     {
         IEnumerable<Tile> item;
         if (Inventory.BuyPlayersItem(out item))
         {
-            homeTile.Text.Show(SalesMessage);
+            //homeTile.Text.Show(SalesMessage); //orbit to buy
+            AskPlayerToBuy(player);
             homeTile.Text.Show(OnBoughtItemFromYou, PurchaseMessageDelay);
             foreach(Tile t in item)
                 Destroy(t.gameObject);
@@ -73,18 +78,44 @@ public class TileBuying : TileAction
     {
         if (Inventory.IsEmpty())
         {
-            homeTile.Text.Show(SalesMessage);
-            player.UpdateActionMessage("Buy");
+            AskPlayerToBuy(player);
         }
         else
         {
-            BuyMessage = BuyMessage.Replace("@c", "" + Inventory.InventoryValue());
-            homeTile.Text.Show(BuyMessage);
-            player.UpdateActionMessage("Sell");
+            AskPlayerToSell(player);
         }
     }
+
+    private void AskPlayerToBuy(PlayerMovement player)
+    {
+        homeTile.Text.Show(SalesMessage); //orbit to buy
+        player.UpdateActionMessage("Buy");
+        playerState = askPlayerToBuyState;
+    }
+    private void AskPlayerToSell(PlayerMovement player)
+    {
+        string m = BuyMessage.Replace("@c", "" + Inventory.InventoryValue());
+        homeTile.Text.Show(m); // orbit to sell
+        player.UpdateActionMessage("Sell");
+        playerState = askPlayerToSellState;
+    }
+
     public override void OnTouchUpdate(PlayerMovement player)
     {
+        if (Inventory.IsEmpty())
+        {
+            if (playerState == askPlayerToSellState)
+            {
+                AskPlayerToBuy(player);
+            }
+        }
+        else
+        {
+            if (playerState == askPlayerToBuyState)
+            {
+                AskPlayerToSell(player);
+            }
+        }
     }
 
     public override void OnTouchLeft(PlayerMovement player)
