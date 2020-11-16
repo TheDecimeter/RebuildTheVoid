@@ -111,7 +111,8 @@ public class PlayerMovement : Character
 
     private void Warp(float height, Vector3 loc)
     {
-        transform.position = new Vector3(loc.x, loc.y + height, loc.z);
+        rb.velocity = Vector3.zero;
+        transform.position = new Vector3(loc.x+3, loc.y + height, loc.z+3);
     }
 
     public void SetDirection(Vector3 dir)
@@ -387,6 +388,14 @@ public class PlayerMovement : Character
                     //rb.velocity = new Vector3(rb.velocity.x * x, 0, rb.velocity.z * z);
                     StartCoroutine(TempPullAnimate(.1f));
                     return true;
+                }
+                else
+                {
+                    rb.velocity = new Vector3(-rb.velocity.x, rb.velocity.y, -rb.velocity.z);
+                    print("not safe but didn't deflect");
+                    transform.position = lastPos;
+                    //rb.velocity = new Vector3(rb.velocity.x * x, 0, rb.velocity.z * z);
+                    StartCoroutine(TempPullAnimate(.1f));
                 }
                 return false;
                 

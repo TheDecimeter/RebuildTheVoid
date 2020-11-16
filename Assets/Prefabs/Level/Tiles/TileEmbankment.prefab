@@ -117,8 +117,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1028078497226465225}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.24, y: 0.37, z: 4.3}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 4.24, y: -18, z: 4.3}
+  m_LocalScale: {x: 1, y: 9.417071, z: 1}
   m_Children: []
   m_Father: {fileID: 547449544744366419}
   m_RootOrder: 0
@@ -194,8 +194,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3500910161882193274}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.33, y: 0.37, z: 4.3}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -4.33, y: -17.999996, z: 4.3}
+  m_LocalScale: {x: 1, y: 9.417071, z: 1}
   m_Children: []
   m_Father: {fileID: 547449544744366419}
   m_RootOrder: 2
@@ -271,8 +271,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3671055323897859772}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.24, y: 0.37, z: -4.21}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 4.24, y: -17.999996, z: -4.21}
+  m_LocalScale: {x: 1, y: 9.417071, z: 1}
   m_Children: []
   m_Father: {fileID: 547449544744366419}
   m_RootOrder: 1
@@ -346,7 +346,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4042424882183788469}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.27718, z: 0}
+  m_LocalPosition: {x: 0, y: 0.64, z: 0}
   m_LocalScale: {x: 1, y: 0.0076243, z: 1}
   m_Children:
   - {fileID: 6620830369991418596}
@@ -366,6 +366,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3994387723046305784}
   - component: {fileID: 4117277779626024780}
+  - component: {fileID: 8253893407320007540}
   m_Layer: 0
   m_Name: TileEmbankment
   m_TagString: Untagged
@@ -410,6 +411,28 @@ MonoBehaviour:
   Text: {fileID: 0}
   Addon: 0
   Static: 1
+--- !u!205 &8253893407320007540
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4667821881047888579}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: -0.045000076, y: 0.5027626, z: 0.045000076}
+  m_Size: 9.57
+  m_FadeMode: 0
+  m_AnimateCrossFading: 0
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.07725602
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 6978002432760702209}
+    - renderer: {fileID: 1361169022207849312}
+    - renderer: {fileID: 8638147491981040478}
+    - renderer: {fileID: 2565478384702922338}
+  m_Enabled: 1
 --- !u!1 &7120737079994462908
 GameObject:
   m_ObjectHideFlags: 0
@@ -436,8 +459,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7120737079994462908}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.33, y: 0.37, z: -4.21}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -4.33, y: -17.999996, z: -4.21}
+  m_LocalScale: {x: 1, y: 9.417071, z: 1}
   m_Children: []
   m_Father: {fileID: 547449544744366419}
   m_RootOrder: 3
