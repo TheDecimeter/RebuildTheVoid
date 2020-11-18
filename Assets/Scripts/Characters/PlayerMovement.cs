@@ -50,9 +50,8 @@ public class PlayerMovement : Character
     {
         currentTile = Level.MapTile(gameObject);
     }
-
-    // Update is called once per frame
-    void Update()
+    
+    void FixedUpdate()
     {
         FaceForward();
 
@@ -64,8 +63,12 @@ public class PlayerMovement : Character
         if (!BounceCheck(t))
             JumpCheck(t);
 
-        FallenCheck();
 
+    }
+
+    private void Update()
+    {
+        FallenCheck();
     }
 
     private void FaceForward()
@@ -129,7 +132,7 @@ public class PlayerMovement : Character
 
     private void ThrustCheck()
     {
-        if (stopInput)
+        if (stopInput || dead)
             return;
 
         if (Input.anyKey)

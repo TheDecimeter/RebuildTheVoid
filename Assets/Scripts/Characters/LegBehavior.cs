@@ -48,6 +48,7 @@ public class LegBehavior : MonoBehaviour
                 i = lwBnd;
             }
 
+            //yes, non local rotation, it's cuter and more chaotic that way
             obj.localRotation = Quaternion.Slerp(start.rotation, goal.rotation, i);
         }
     }
