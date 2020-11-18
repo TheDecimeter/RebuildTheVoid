@@ -147,6 +147,9 @@ public class PlayerMovement : Character
                     lastDirToPillar = pillar - transform.position;
 
                     GetHeading = CalculateHeading(pullPoint);
+
+
+                    rb.AddForce(GetHeading(pullPoint).normalized * Acceleration*4, ForceMode.Acceleration);
                 }
 
             }
@@ -336,6 +339,8 @@ public class PlayerMovement : Character
 
     private bool BounceCheck(Tile t)
     {
+        if (dead)
+            return false;
 
         if (t != currentTile)
         {
