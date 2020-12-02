@@ -5,8 +5,11 @@ using UnityEngine;
 public class DemoManager : MonoBehaviour
 {
     public float loopTime = 1;
+    public int repitions = -1;
+    public DemoManager[] reset;
     public Action[] actions;
     private float delta = 0;
+    private int repitionCount = 0;
     private HashSet<Action> inProgress = new HashSet<Action>();
 
     [System.Serializable]
@@ -17,11 +20,22 @@ public class DemoManager : MonoBehaviour
     
     void Update()
     {
+        if (repitionCount == repitions)
+            return;
         delta += Time.deltaTime;
         if (delta >= loopTime)
+        {
+            repitionCount++;
             ResetActions();
+        }
         else
             UpdateActions(delta);
+    }
+
+    public void ResetAll()
+    {
+        ResetActions();
+        repitionCount = 0;
     }
 
     private void ResetActions()
@@ -29,6 +43,9 @@ public class DemoManager : MonoBehaviour
         delta = 0;
         foreach (Action a in actions)
             a.action.ResetAction();
+        foreach (DemoManager d in reset)
+            d.ResetAll();
+        inProgress = new HashSet<Action>();
     }
 
     private void UpdateActions(float delta)

@@ -11,19 +11,19 @@ public class DActRotate : DemoAction
     public override void Do(float delta)
     {
         if (delta == 0)
-            startRot = transform.rotation;
-        transform.rotation = Quaternion.Slerp(startRot, goal.rotation, Dist.Evaluate(delta));
+            startRot = transform.localRotation;
+        transform.localRotation = Quaternion.Slerp(startRot, goal.localRotation, Dist.Evaluate(delta));
         //Lerp(Dist.Evaluate(delta));
     }
 
     public override void ResetAction()
     {
-        transform.rotation = resetRot;
+        transform.localRotation = resetRot;
     }
 
     void Start()
     {
-        resetRot = transform.rotation;
+        resetRot = transform.localRotation;
     }
 
     private void Lerp(float delta)
