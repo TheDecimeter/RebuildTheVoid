@@ -13,6 +13,7 @@ public class PlayerMovement : Character
     public Inventory Inventory;
     public Camera Camera;
     public GameObject DeathMessage;
+    public Collider BodyCollider;
 
     public TextMeshProUGUI ActionHUD;
 
@@ -48,6 +49,13 @@ public class PlayerMovement : Character
     // Start is called before the first frame update
     void Start()
     {
+        if (Level == null)
+        {
+            Destroy(rb);
+            Destroy(BodyCollider);
+            Destroy(this);
+            return;//just for demoing
+        }
         currentTile = Level.MapTile(gameObject);
     }
     

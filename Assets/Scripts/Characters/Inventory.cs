@@ -17,6 +17,11 @@ public class Inventory : MonoBehaviour
 
     private void Start()
     {
+        if (MoneyDisplay == null)
+        {
+            Destroy(this);
+            return; //sometimes a player model is used for demos and needs no function
+        }
         dMoney = MoneyDisplay;
         dInventory = InventoryDisplay;
         
