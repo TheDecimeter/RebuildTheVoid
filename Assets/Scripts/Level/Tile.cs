@@ -12,6 +12,8 @@ public class Tile : MonoBehaviour
     public TileText Text;
     public bool Addon = false;
     public bool Static=false;
+    public Renderer mat;
+    public Color touchedColor, normalColor;
 
     public LevelController Level { get; set; }
 
@@ -97,6 +99,7 @@ public class Tile : MonoBehaviour
     }
     public void OnTouchLeft(PlayerMovement player)
     {
+        mat.material.SetColor("_Color", normalColor);
         RemovePlayer();
         RemoveCharacter(player);
         if (action != null)
@@ -106,6 +109,7 @@ public class Tile : MonoBehaviour
     }
     public void OnTouchBegin(PlayerMovement player)
     {
+        mat.material.SetColor("_Color", touchedColor);
         RemoveCharacter(player);
         AddPlayer(player);
         //print("touch beg in " + x + " " + y);

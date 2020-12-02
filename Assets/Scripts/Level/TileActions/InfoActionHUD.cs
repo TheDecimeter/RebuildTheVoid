@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class InfoActionHUD : MonoBehaviour
 {
+    public InfoActionHUD next;
     public float MinDisplayTime = .5f;
     private float timer;
     public bool CloseOnPress = true;
@@ -29,6 +30,8 @@ public class InfoActionHUD : MonoBehaviour
             {
                 gameObject.SetActive(false);
                 PlayerMovement.stopInput = false;
+                if (next != null)
+                    next.Activate(true);
             }
         }
     }

@@ -627,6 +627,9 @@ MonoBehaviour:
   Text: {fileID: 3423642103396978656}
   Addon: 0
   Static: 0
+  mat: {fileID: 1028017065072462793}
+  touchedColor: {r: 0.21176471, g: 0.6039216, b: 0.34509805, a: 0.89411765}
+  normalColor: {r: 0.21176471, g: 0.6039216, b: 0.34509805, a: 0.67058825}
 --- !u!205 &3981320167288166336
 LODGroup:
   m_ObjectHideFlags: 0
