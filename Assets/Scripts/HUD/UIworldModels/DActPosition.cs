@@ -12,12 +12,7 @@ public class DActPosition : DemoAction
     {
         if (delta == 0)
         {
-            print("reset start pos "+gameObject.name+" "+ transform.localPosition);
             startPos = transform.localPosition;
-        }
-        else if (delta == 1)
-        {
-            print("reset endPos " + gameObject.name + " " + transform.localPosition);
         }
         transform.localPosition = Vector3.Lerp(startPos, goal.localPosition, Dist.Evaluate(delta));
     }

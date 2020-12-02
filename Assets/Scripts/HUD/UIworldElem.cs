@@ -19,6 +19,7 @@ public class UIworldElem : MonoBehaviour
     void Update()
     {
         modelInstance.transform.position=cam.ScreenToWorldPoint(uiSpace.transform.position);
+        modelInstance.transform.forward = cam.transform.forward;
     }
 
     private void OnEnable()
