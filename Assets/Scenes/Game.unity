@@ -10361,7 +10361,6 @@ GameObject:
   - component: {fileID: 1616103258}
   - component: {fileID: 1616103257}
   - component: {fileID: 1616103256}
-  - component: {fileID: 1616103255}
   m_Layer: 0
   m_Name: WarpButton
   m_TagString: Untagged
@@ -10388,18 +10387,6 @@ RectTransform:
   m_AnchoredPosition: {x: -53.7, y: -118.6}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1616103255
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1616103253}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26130a91dbcb8ed4594dac8c0e50adb5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1616103256
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12921,7 +12908,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -154, y: 106}
+  m_AnchoredPosition: {x: -154, y: 49.4}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2061399138

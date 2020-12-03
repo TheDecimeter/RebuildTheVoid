@@ -18,8 +18,14 @@ public class UIworldElem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        modelInstance.transform.position=cam.ScreenToWorldPoint(uiSpace.transform.position);
-        modelInstance.transform.forward = cam.transform.forward;
+        modelInstance.transform.position = pos();// cam.ScreenToWorldPoint(uiSpace.transform.position);
+        modelInstance.transform.forward = (cam.transform.forward*3+cam.transform.up).normalized;
+    }
+
+    Vector3 pos()
+    {
+        Vector3 r=cam.transform.position-cam.ScreenToWorldPoint(uiSpace.transform.position);
+        return cam.transform.position-r.normalized * 7;
     }
 
     private void OnEnable()
