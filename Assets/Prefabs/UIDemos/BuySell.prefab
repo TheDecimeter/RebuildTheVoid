@@ -1076,19 +1076,19 @@ MonoBehaviour:
   repitions: -1
   reset: []
   actions:
-  - start: 2.7
-    end: 6.7
+  - start: 2.75
+    end: 6.75
     action: {fileID: 8348900443588065378}
-  - start: 6.7
+  - start: 6.75
     end: 8
     action: {fileID: 8348900445282273338}
-  - start: 2.7
+  - start: 2.75
     end: 4
     action: {fileID: 8348900445043954548}
   - start: 0
-    end: 2.7
+    end: 2.75
     action: {fileID: 8348900444806964873}
-  - start: 6.7
+  - start: 6.75
     end: 8
     action: {fileID: 8348900444806964873}
 --- !u!1 &8348900444806964875
