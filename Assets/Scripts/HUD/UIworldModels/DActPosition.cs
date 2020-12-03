@@ -25,7 +25,6 @@ public class DActPosition : DemoAction
     // Start is called before the first frame update
     void Start()
     {
-        print("reset position " + transform.localPosition);
         resetPos = transform.localPosition;
     }
     
