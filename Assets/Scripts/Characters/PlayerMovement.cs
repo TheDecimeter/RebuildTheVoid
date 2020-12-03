@@ -56,7 +56,7 @@ public class PlayerMovement : Character
             Destroy(this);
             return;//just for demoing
         }
-        currentTile = Level.MapTile(gameObject);
+        previousEmbankment = currentTile = Level.MapTile(gameObject);
     }
     
     void FixedUpdate()
