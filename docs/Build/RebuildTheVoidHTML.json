@@ -1,0 +1,13 @@
+{
+"companyName": "DefaultCompany",
+"productName": "Rebuild The Void",
+"dataUrl": "RebuildTheVoidHTML.data.unityweb",
+"wasmCodeUrl": "RebuildTheVoidHTML.wasm.code.unityweb",
+"wasmFrameworkUrl": "RebuildTheVoidHTML.wasm.framework.unityweb",
+"TOTAL_MEMORY": 268435456,
+"graphicsAPI": ["WebGL 2.0", "WebGL 1.0"],
+"webglContextAttributes": {"preserveDrawingBuffer": false},
+"splashScreenStyle": "Dark",
+"backgroundColor": "#231F20",
+"cacheControl": {"default": "must-revalidate"}
+}

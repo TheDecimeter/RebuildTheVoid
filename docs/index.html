@@ -3,87 +3,25 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Rebuild The Void</title>
+    <title>Unity WebGL Player | Rebuild The Void</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
     <script src="TemplateData/UnityProgress.js"></script>
     <script src="Build/UnityLoader.js"></script>
     <script>
-      var gameInstance = UnityLoader.instantiate("gameContainer", "Build/RebuildTheVoidHTMLv2.json", {onProgress: UnityProgress});
+	  //compatibilityCheck = function(e,t,r) {}
+	  UnityLoader.compatibilityCheck=function(e,t,r){t();};
+      var gameInstance = UnityLoader.instantiate("gameContainer", "Build/RebuildTheVoidHTML.json", {onProgress: UnityProgress});
     </script>
   </head>
   <body>
-  
-  
-  
-  
-  <div id="welcome" style="width:60%; margin:10%;">
-  Welcome, thanks for trying out my game. If you can, please record yourself playing and verbally state
-  every action you are hoping to do.
-  Seeing how many times you try something, helps me know how to progress.
-  <br><br>
-  If you don't know how to record your screen, and you are going to the University of Utah:
-  <ul>
-	  <li>Go to <a href="https://utah.zoom.us/">https://utah.zoom.us/</a></li>
-	  <li>Click <q>Sign in</q>.
-		  <ul>
-			<li>(you can sign in the same way you get into CIS)</li>
-		  </ul>
-	  </li>
-	  <li>Click <q>Host a meeting</q> in the upper right.
-		  <ul>
-			<li>(you'll have to click a drop down option)</li>
-		  </ul>
-	  </li>
-	  <li>You will be promted to open Zoom, do that.</li>
-	  <li>Click the record button at the bottom.
-		  <ul>
-			<li>(Cloud recording should be the most convenient option, just DM me the link and password on discord)</li>
-			<li>If you want audio, make sure the mic input is correct. Zoom sometimes changes this if you are hosting rather than joining (it also might be using a different account than expected).</li>
-		  </ul>
-	  </li>
-  </ul>
-  <br><br>
-  <b>DO NOT watch the video below before trying to play</b><br>
-  It is only intended for players who get really stuck at the beginning.
-  <br><br>
-  Have fun.
-  <br><br>
-  <button onclick="
-  
-  document.getElementById('gameHider').style.display='block';
-  document.getElementById('welcome').style.display='none';
-  ">
-  <b>Click To Play</b>
-  </button>
-  </div>
-  <div style="width: 1000px; height: 700px">
-  <div id="gameHider" style="display:none">
     <div class="webgl-content">
       <div id="gameContainer" style="width: 960px; height: 600px"></div>
       <div class="footer">
+        <div class="webgl-logo"></div>
         <div class="fullscreen" onclick="gameInstance.SetFullscreen(1)"></div>
-        <div class="title"><a href="https://curiousorigins.itch.io/rebuild-the-void">Rebuild The Void (Native builds at itch.io)</a></div>
+        <div class="title">Rebuild The Void</div>
       </div>
     </div>
-	</div>
-	</div>
-	<br>
-	<div style="width:80%; margin:10%;">
-	If the framerate is low, there are native builds on the <a href="https://curiousorigins.itch.io/rebuild-the-void">itch page</a>.
-	<br><br>
-	<b>If you are having trouble playing,</b><br>
-	make note of what part of the game was difficult/confusing (what you are trying to do to succeed at playing). 
-	<br>Then, watch the video below for tips.<br>
-	<br> Remember this is a one button game. The button is held anytime the white <q>grapple</q> is used.<br>
-	
-	<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/TAUkfEWqhZs" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-	</div>
-	
-	
-	
-	
-	
-	
   </body>
 </html>
