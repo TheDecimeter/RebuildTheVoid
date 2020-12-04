@@ -1,29 +1,28 @@
-var cacheName = 'phaser-v1';
+var cacheName = 'RebuildTheVoid-V3.0';
 var filesToCache = [
-  './',
-  './index.html',
+  'index.html',
   
-  './TemplateData/favicon.ico',
-  './TemplateData/icon-192.png',
-  './TemplateData/icon-256.png',
-  './TemplateData/icon-512.png',
-  './TemplateData/favicon.ico',
-  './TemplateData/fullscreen.png',
-  './TemplateData/progressEmpty.Dark.png',
-  './TemplateData/progressEmpty.Light.png',
-  './TemplateData/progressFull.Dark.png',
-  './TemplateData/progressFull.Light.png',
-  './TemplateData/progressLogo.Dark.png',
-  './TemplateData/progressLogo.Light.png',
-  './TemplateData/style.css',
-  './TemplateData/UnityProgress.js',
-  './TemplateData/webgl-logo.png',
+  'TemplateData/favicon.ico',
+  'TemplateData/icon-192.png',
+  'TemplateData/icon-256.png',
+  'TemplateData/icon-512.png',
+  'TemplateData/favicon.ico',
+  'TemplateData/fullscreen.png',
+  'TemplateData/progressEmpty.Dark.png',
+  'TemplateData/progressEmpty.Light.png',
+  'TemplateData/progressFull.Dark.png',
+  'TemplateData/progressFull.Light.png',
+  'TemplateData/progressLogo.Dark.png',
+  'TemplateData/progressLogo.Light.png',
+  'TemplateData/style.css',
+  'TemplateData/UnityProgress.js',
+  'TemplateData/webgl-logo.png',
   
-  './Build/RebuildTheVoidHTML.data.unityweb',
-  './Build/RebuildTheVoidHTML.json',
-  './Build/RebuildTheVoidHTML.wasm.code.unityweb',
-  './Build/RebuildTheVoidHTML.wasm.framework.unityweb',
-  './Build/UnityLoader.js'
+  'Build/RebuildTheVoidHTML.data.unityweb',
+  'Build/RebuildTheVoidHTML.json',
+  'Build/RebuildTheVoidHTML.wasm.code.unityweb',
+  'Build/RebuildTheVoidHTML.wasm.framework.unityweb',
+  'Build/UnityLoader.js'
 ];
  
  //install cache
