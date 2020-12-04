@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>        
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8">
+	<meta name="theme-color" content="black" />
+	<link rel="manifest" href="manifest.json" />
+	<link rel="icon" href="TemplateData/icon-192.png" sizes="192x192" />
+	<link rel="icon" href="TemplateData/icon-256.png" sizes="256x256" />
+	<link rel="icon" href="TemplateData/icon-512.png" sizes="512x512" />
+	
+    
+    <title>Rebuild The Void</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+    <script src="TemplateData/UnityProgress.js"></script>
+    <script src="Build/UnityLoader.js"></script>
+    <script>
+		
+		
+            
+    </script>
+  </head>
+  <body>
+  
+  
+        
+		
+    <div class="webgl-content">
+      <div id="gameContainer" style="width: 960px; height: 600px"></div>
+      <div class="footer">
+		<div class="webgl-logo">
+		<!-- The Modal -->
+        <div id="myModal" style="display:none;">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <button onclick="offlinePrompt()">Install Now</button>
+            </div>
+        </div>
+		</div>
+        <div class="fullscreen" onclick="gameInstance.SetFullscreen(1)"></div>
+        <div class="title"><a href="https://curiousorigins.itch.io/rebuild-the-void">Rebuild The Void (More at itch.io)</a></div>
+      </div>
+    </div>
+	
+	<script>
+	console.log("  VERSION 11");
+	if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                    navigator.serviceWorker.register('./sw.js', {scope: './'}).then(function(registration) {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    }, function(err) {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+                });
+            }
+            let deferredPrompt;
+            window.addEventListener('beforeinstallprompt', function (e) {
+                console.log('beforeinstallprompt triggered');
+                e.preventDefault();
+                deferredPrompt = e;
+                modal.style.display = 'block';
+            });
+            // Get the modal
+            var modal = document.getElementById('myModal');
+            // Get the <span> element that closes the modal
+            var span = document.getElementsByClassName('close')[0];
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            }
+            function offlinePrompt() {
+                deferredPrompt.prompt();
+            }
+	
+	
+	
+	
+	  UnityLoader.compatibilityCheck=function(e,t,r){t();};
+      var gameInstance = UnityLoader.instantiate("gameContainer", "Build/RebuildTheVoidHTML.json", {onProgress: UnityProgress});
+	</script>
+	
+	
+  </body>
+</html>
