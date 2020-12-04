@@ -1,0 +1,22 @@
+{
+    "name": "Rebuild The Void PWA",
+    "short_name": "Rebuild The Void",
+    "description": "One Button Action Puzzle Game",
+    "start_url": "/",
+    "background_color": "#000000",
+    "theme_color": "#0f4a73",
+    "display": "standalone",
+    "icons": [{
+      "src": "TemplateData/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },{
+      "src": "TemplateData/icon-256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },{
+      "src": "TemplateData/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }]
+  }
