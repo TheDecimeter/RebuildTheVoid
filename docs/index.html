@@ -17,12 +17,13 @@
     </script>
   </head>
   <body>
-    <div class="webgl-content">
-      <div id="gameContainer" style="width: 960px; height: 600px"></div>
-      <div class="footer">
-        <div class="fullscreen" onclick="gameInstance.SetFullscreen(1)"></div>
-        <div class="title"><a href="https://curiousorigins.itch.io/rebuild-the-void">Rebuild The Void (More at itch.io)</a></div>
+    <div class="webgl-content" style="width: 100vw; height: 100vh; overflow: hidden;">
+      <div id="gameContainer" style="width: 100%; height: 95vh"></div>
+      <div class="footer"  style="width: 100%; height: 5%; font-size: 2.5vh;">
+        <div class="fullscreen" onclick="gameInstance.SetFullscreen(1)" style="height:5vh"></div>
+        <div class="title"><a href="https://curiousorigins.itch.io/rebuild-the-void" target="_top">Rebuild The Void (More at itch.io)</a></div>
       </div>
     </div>
   </body>
+  
 </html>
