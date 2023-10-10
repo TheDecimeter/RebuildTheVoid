@@ -21,12 +21,12 @@
     .display {
       width: 100svw;
       height: 100svh;
-      overflow: hidden;
+      /* overflow: hidden; */
     }
 
     .gameDisplay {
       width: 100svw;
-      height: 95svw;
+      aspect-ratio: 16/9;
     }
 
     .subDisplayText {
@@ -39,13 +39,19 @@
       height: 5svh;
     }
 
-    @media (max-aspect-ratio: 1/1) {
-      .display {
-        height: 55svh;
-      }
-
+    @media (min-aspect-ratio: 16/9) {
       .gameDisplay {
-        height: 50svw;
+        width: auto;
+        height: 95svh;
+        aspect-ratio: 16/9;
+      }
+    }
+
+    @media (max-aspect-ratio: 10/9) {
+      .gameDisplay {
+        width: 100svw;
+        height: auto;
+        aspect-ratio: 10/9;
       }
     }
   </style>
